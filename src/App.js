@@ -10,8 +10,8 @@ function App() {
     <Suspense fallback = {<div>Loading....</div>}>
       <Routes>
 
-        <Route path ="//form-login-page" element = {<Account/>} />
-        <Route path ="//form-salary-page" element = {<MyForm/>} />
+        <Route path ="/form-login-page" element = {<Account/>} />
+        <Route path ="/form-salary-page" element = {<MyForm/>} />
 
       </Routes>
     </Suspense>
