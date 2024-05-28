@@ -55,7 +55,6 @@ const MyForm = () => {
           setUser(null);
           setIsLoggedIn(false);
           window.location.reload(true);
-          window.location.href = '/form-salary-page';
         }
       };
 

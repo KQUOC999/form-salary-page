@@ -55,7 +55,6 @@ const Account = () => {
       setUser(loggedInUser);
       setIsLoggedIn(true); // Đã đăng nhập thành công
       window.location.reload(true);
-      window.location.href = '/form-page';
 
     } catch (error) {
       console.log(error.error);

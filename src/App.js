@@ -11,7 +11,7 @@ function App() {
       <Routes>
 
         <Route path ="/form-salary-page" element = {<Account/>} />
-        <Route path ="/form-page" element = {<MyForm/>} />
+        <Route path ="/form-salary-page" element = {<MyForm/>} />
 
       </Routes>
     </Suspense>
