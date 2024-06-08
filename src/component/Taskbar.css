@@ -1,0 +1,31 @@
+/* Taskbar.css */
+.taskbar-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #007bff;
+  padding: 10px;
+  width: 100%;
+}
+
+.taskbar-container button {
+  color: #fff;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.taskbar-container button:hover {
+  text-decoration: underline;
+}
+
+
+.taskbar-items a {
+  color: #fff;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.taskbar-items a:hover {
+  text-decoration: underline;
+}

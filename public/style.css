@@ -1,6 +1,6 @@
-/* styles.css */
-
-html,
+html:lang(en),
+body:lang(en),
+#root:lang(en),
 body,
 #root {
   height: 100%;

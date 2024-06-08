@@ -1,14 +1,9 @@
-
 import React, { useState} from 'react';
 import * as Realm from 'realm-web';
 import Form from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
-import MyForm from './form';
-
-
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
-const user = app.currentUser;
 
 const schema = {
   title: 'Register',
@@ -31,18 +26,18 @@ const loginSchema = {
 };
 
 const Account = () => {
-  const [ , setUser] = useState(null);
+  const [user, setUser] = useState(null);
   const [showRegisterForm, setShowRegisterForm] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Thêm state mới để kiểm tra trạng thái đăng nhập
-  
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const register = async (form) => {
     const { email, password } = form.formData;
     try {
       await app.emailPasswordAuth.registerUser({ email, password });
-      window.location.reload(true);
+      window.location.replace('/form-salary-page');
     } catch (error) {
-      console.log(error.error);
+      console.log(error.message);
     }
   };
 
@@ -53,11 +48,11 @@ const Account = () => {
       const loggedInUser = await app.logIn(credentials);
       setLoading(false);
       setUser(loggedInUser);
-      setIsLoggedIn(true); // Đã đăng nhập thành công
-      window.location.reload(true);
+      setIsLoggedIn(true);
+      window.location.reload(true)
 
     } catch (error) {
-      console.log(error.error);
+      console.log(error.message);
     }
   };
 
@@ -65,7 +60,7 @@ const Account = () => {
     <div>
       {user ? (
         <>
-          {isLoggedIn && loading ? <p>Loading...</p> : <MyForm />}
+          {isLoggedIn && loading ? <p>Loading...</p> : <Account />}
         </>
       ) : (
         <div className="overlay-container">

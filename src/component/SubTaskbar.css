@@ -1,0 +1,29 @@
+/* SubTaskbar.css */
+.sub-taskbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f8f9fa;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  width: 100%;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1); /* Thêm bóng chân */
+}
+
+.subTaskbar-items a {
+  margin: 0px 5vw;
+}
+
+.subTaskbar-items:last-child {
+  margin: none;
+}
+
+.subTaskbar-items a {
+  color: #333;
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.subTaskbar-items a:hover {
+  text-decoration: underline;
+}

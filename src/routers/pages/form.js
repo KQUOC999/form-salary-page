@@ -17,8 +17,8 @@ const MyForm = () => {
     const [formDataInputChange, setFormDataInputChange]                                 = useState({});
     const [ , setResponseArray]                                                         = useState([]);
     const [, setIsLoggedIn] = useState(false);
-    const [ , setUser] = useState(app.currentUser);
     const [role, setRole] = useState('');
+
 
   useEffect(() => {
     if (user) {
@@ -49,16 +49,6 @@ const MyForm = () => {
     }
   };
 
-    const logout = async () => {
-        if (user) {
-          await user.logOut();
-          setUser(null);
-          setIsLoggedIn(false);
-          window.location.reload(true);
-        }
-      };
-
-   
     const fetchDataNetSalaryModule = useCallback(async () => {
         try {
             if(role === 'admin' || role === 'user'){
@@ -371,8 +361,7 @@ const MyForm = () => {
     return (
         <>
             {user? (
-                <div className="flex justify-center">
-                    <button onClick={logout}>Logout</button>
+                <div className="flex-justify-center">
                     <p>Role: {role}</p>
                     {role === 'admin' ? <div>Admin Content</div> : <div>Access Denied</div>}
                     {jsonSchemaCalculateNetSalaryInput ? (
