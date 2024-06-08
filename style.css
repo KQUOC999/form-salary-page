@@ -1,0 +1,9 @@
+html:lang(en),
+body:lang(en),
+#root:lang(en),
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
