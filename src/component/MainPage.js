@@ -31,7 +31,7 @@ const MainPage = () => {
   }, [currentUser]);
 
   useEffect(() => {
-    const selectedItem = localStorage.getItem('selectedTaskbar');
+    const selectedItem = sessionStorage.getItem('selectedTaskbar');
     if (selectedItem) {
       setSelectedTaskbar(JSON.parse(selectedItem));
     }
@@ -67,7 +67,7 @@ const MainPage = () => {
 
   const handleTaskbarSelect = (taskbar) => {
     setSelectedTaskbar(taskbar);
-    localStorage.setItem('selectedTaskbar', JSON.stringify(taskbar));
+    sessionStorage.setItem('selectedTaskbar', JSON.stringify(taskbar));
     navigate(taskbar.path);
   };
 
