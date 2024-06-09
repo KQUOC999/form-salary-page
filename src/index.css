@@ -1,67 +1,52 @@
-/* Ensure the video covers the entire viewport */
-.background-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover; 
-  z-index: -1; 
-}
-
-/* CSS for form container */
 .container_form {
   display: flex;
-  flex-direction: column; 
-  align-items: center; 
+  flex-direction: column;
+  align-items: center;
 }
 
-/* CSS for form buttons */
 .button1 {
-  align-self: flex-start;
+  align-self: flex-start; /* Đặt nút "Đăng ký" bên trái */
   margin: 10px;
-  padding: 10px 15px;
-  background-color: #ff0000; 
-  color: #fff; 
+  padding: 10px 20px;
+  background-color: #ff0000; /* Màu nền của nút */
+  color: #fff; /* Màu chữ của nút */
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease; /* Hiệu ứng hover */
 }
 
 .button1:hover {
-  background-color: #f17814; 
+  background-color: #f17814; /* Màu nền của nút khi hover */
 }
 
-/* CSS for form inputs */
 .custom-form input[type="text"],
 .custom-form input[type="password"],
 .custom-form input[type="email"] {
-  width: calc(100% - 22px);
+  width: 100%;
   padding: 10px;
   margin-bottom: 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
+  box-sizing: border-box; /* Tính toán kích thước bao gồm cả border và padding */
 }
 
-/* CSS for form submission button */
 .custom-form button[type="submit"] {
-  width: 100%;
+  width: 100%; /* Sử dụng đầy đủ chiều rộng của form */
   margin-top: 10px;
-  background-color: #2487f0; 
+  background-color: #2487f0; /* Màu nền của nút gửi */
   color: #fff; /* Màu chữ của nút gửi */
   border: none;
   padding: 10px;
   border-radius: 5px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease; /* Hiệu ứng hover */
 }
 
 .custom-form button[type="submit"]:hover {
-  background-color: #0056b3;
+  background-color: #0056b3; /* Màu nền của nút gửi khi hover */
 }
 
-/* CSS for form container */
 .overlay-container {
   position: relative;
   z-index: 1;
@@ -81,3 +66,12 @@
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
 }
 
+.background-video {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1;
+}
