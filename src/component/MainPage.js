@@ -75,10 +75,12 @@ const MainPage = () => {
   };
 
   const handleSubTaskbarSelect = (subTaskbarItem) => {
-    if (!openTabs.find(tab => tab.path === subTaskbarItem.path)) {
-      setOpenTabs([...openTabs, subTaskbarItem]);
-      localStorage.setItem('openTabs', JSON.stringify([...openTabs, subTaskbarItem]));
-    }
+    setOpenTabs(prevTabs => {
+      const updatedTabs = prevTabs.filter(tab => tab.path !== subTaskbarItem.path);
+      const newTabs = [subTaskbarItem, ...updatedTabs];
+      localStorage.setItem('openTabs', JSON.stringify(newTabs));
+      return newTabs;
+    });
   };
 
   const handleCloseTab = (tabPath) => {
@@ -147,64 +149,63 @@ const MainPage = () => {
     { label: "Phân quyền", path: "/tùy_chỉnh/phân_quyền" },
     { label: "Sơ đồ", path: "/tùy_chỉnh/sơ_đồ" },
     { label: "Nghỉ chế độ", path: "/tùy_chỉnh/nghỉ_chế_độ"},
-      { label: "Phép năm", path: "/tùy_chỉnh/phép_năm" },
-      { label: "Phân giờ", path: "/tùy_chỉnh/phân_giờ" },
-      { label: "Chọn dữ liệu", path: "/tùy_chỉnh/chọn_dữ_liệu" },
-      { label: "Xóa dữ liệu", path: "/tùy_chỉnh/xóa_dữ_liệu" },
-      { label: "Form", path: "/form-page" },
-      { label: "NodeRed", path: "/client-page" },
-      { label: "Search", path: "/search-page" }
-    ];
-  
-    if (loading) {
-      return <div>Loading...</div>;
-    }
-  
-    return (
-      <div className="main-page">
-        
-        {isLoggedIn ? (
-          <>
-            <div className="taskbar-container">
-              <Taskbar items={taskbarItems} onSelect={handleTaskbarSelect} />
-              <button onClick={logout}>Logout</button>
-            </div>
-            {selectedTaskbar && (
-              <SubTaskbar
-                items={
-                  selectedTaskbar.label === "Tính công"
-                    ? attendanceSubTaskbarItems
-                    : customizationSubTaskbarItems
-                }
-                onSelect={handleSubTaskbarSelect} // Thêm callback để xử lý khi một tab được chọn
-              />
-            )}
-            
-            <div className="container-main-page">
-              {/* Hiển thị nội dung của các tab đang mở */}
-              {openTabs.map(tab => (
-                <div key={tab.path} className="tab-content">
-                  <div className="tab-header">
-                    {tab.label}
-                    <button onClick={() => handleCloseTab(tab.path)}>x</button>
-                  </div>
-                  <div className="tab-body">
-                    {renderTabContent(tab.path)}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </>
-        ) : (
-          <div className="flex items-center justify-center h-screen">
-            <Routes>
-              <Route path="/form-salary-page" element={<Account />} />
-            </Routes>
+    { label: "Phép năm", path: "/tùy_chỉnh/phép_năm" },
+    { label: "Phân giờ", path: "/tùy_chỉnh/phân_giờ" },
+    { label: "Chọn dữ liệu", path: "/tùy_chỉnh/chọn_dữ_liệu" },
+    { label: "Xóa dữ liệu", path: "/tùy_chỉnh/xóa_dữ_liệu" },
+    { label: "Form", path: "/form-page" },
+    { label: "NodeRed", path: "/client-page" },
+    { label: "Search", path: "/search-page" }
+  ];
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div className="main-page">
+      
+      {isLoggedIn ? (
+        <>
+          <div className="taskbar-container">
+            <Taskbar items={taskbarItems} onSelect={handleTaskbarSelect} />
+            <button onClick={logout}>Logout</button>
           </div>
-        )}
-      </div>
-    );
-  };
-  
-  export default MainPage;
-  
+          {selectedTaskbar && (
+            <SubTaskbar
+              items={
+                selectedTaskbar.label === "Tính công"
+                  ? attendanceSubTaskbarItems
+                  : customizationSubTaskbarItems
+              }
+              onSelect={handleSubTaskbarSelect} // Thêm callback để xử lý khi một tab được chọn
+            />
+          )}
+          
+          <div className="container-main-page">
+            {/* Hiển thị nội dung của các tab đang mở */}
+            {openTabs.map(tab => (
+              <div key={tab.path} className="tab-content">
+                <div className="tab-header">
+                  {tab.label}
+                  <button onClick={() => handleCloseTab(tab.path)}>x</button>
+                </div>
+                <div className="tab-body">
+                  {renderTabContent(tab.path)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </>
+      ) : (
+        <div className="flex items-center justify-center h-screen">
+          <Routes>
+            <Route path="/form-salary-page" element={<Account />} />
+          </Routes>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default MainPage;
