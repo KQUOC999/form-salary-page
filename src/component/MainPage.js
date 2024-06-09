@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import * as Realm from 'realm-web';
 import './MainPage.css';
 
@@ -20,6 +20,7 @@ const MainPage = () => {
   const [currentUser, setCurrentUser] = useState(app.currentUser);
   const [, setRole] = useState('');
   const [selectedTaskbar, setSelectedTaskbar] = useState(null);
+  const [openTabs, setOpenTabs] = useState([]); // State mới để lưu trữ danh sách các tab đang mở
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,6 +36,9 @@ const MainPage = () => {
     if (selectedItem) {
       setSelectedTaskbar(JSON.parse(selectedItem));
     }
+
+    const storedTabs = JSON.parse(localStorage.getItem('openTabs') || '[]');
+    setOpenTabs(storedTabs);
   }, []);
 
   const checkUserRole = async (user) => {
@@ -68,68 +72,139 @@ const MainPage = () => {
   const handleTaskbarSelect = (taskbar) => {
     setSelectedTaskbar(taskbar);
     sessionStorage.setItem('selectedTaskbar', JSON.stringify(taskbar));
-    navigate(taskbar.path);
+  };
+
+  const handleSubTaskbarSelect = (subTaskbarItem) => {
+    if (!openTabs.find(tab => tab.path === subTaskbarItem.path)) {
+      setOpenTabs([...openTabs, subTaskbarItem]);
+      localStorage.setItem('openTabs', JSON.stringify([...openTabs, subTaskbarItem]));
+    }
+  };
+
+  const handleCloseTab = (tabPath) => {
+    // Loại bỏ tab bằng cách lọc ra các tab không phải là tab đó
+    const updatedTabs = openTabs.filter(tab => tab.path !== tabPath);
+    setOpenTabs(updatedTabs);
+    
+    // Lưu trạng thái mới của các tab mở vào localStorage
+    localStorage.setItem('openTabs', JSON.stringify(updatedTabs));
+  };
+
+  const renderTabContent = (path) => {
+    switch(path) {
+      case "/form-page":
+        return <MyForm />;
+      case "/client-page":
+        return <MqttClient />;
+      case "/search-page":
+        return <Search />;
+      case "/tính_công/employee":
+      case "/tính_công/workshift":
+      case "/tính_công/marking_scheme":
+      case "/tính_công/schedule":
+      case "/tính_công/employee_schedule":
+      case "/tính_công/time_clock_machine":
+      case "/tính_công/MCC_connection":
+      case "/tính_công/connect_multiple_devices":
+      case "/tính_công/reporting":
+      case "/tính_công/time_clock_hours":
+      case "/tính_công/current_status":
+        return <AttendancePage />;
+      case "/tùy_chỉnh/phân_quyền":
+      case "/tùy_chỉnh/sơ_đồ":
+      case "/tùy_chỉnh/nghỉ_chế_độ":
+      case "/tùy_chỉnh/phép_năm":
+      case "/tùy_chỉnh/phân_giờ":
+      case "/tùy_chỉnh/chọn_dữ_liệu":
+      case "/tùy_chỉnh/xóa_dữ_liệu":
+        return <CustomizationPage />;
+      default:
+        return null;
+    }
   };
 
   const taskbarItems = [
-    { label: "Attendance", path: "/attendance" },
-    { label: "Customization", path: "/customization" }
+    { label: "Tính công", path: "/tính_công" },
+    { label: "Tùy chỉnh", path: "/tùy_chỉnh" }
   ];
 
   const attendanceSubTaskbarItems = [
-    { label: "Home", path: "/myhome" },
-    { label: "Form", path: "/form-page" },
-    { label: "NodeRed", path: "/client-page" },
-    { label: "Search", path: "/search-page" }
+    { label: "Nhân viên", path: "/tính_công/employee" },
+    { label: "Ca làm việc", path: "/tính_công/workshift" },
+    { label: "Cách chấm", path: "/tính_công/marking_scheme" },
+    { label: "Lịch trình", path: "/tính_công/schedule" },
+    { label: "Lịch nhân viên", path: "/tính_công/employee_schedule" },
+    { label: "Máy chấm công", path: "/tính_công/time_clock_machine" },
+    { label: "Kết nối MCC", path: "/tính_công/MCC_connection" },
+    { label: "Kết nối nhiều thiết bị", path: "/tính_công/connect_multiple_devices" },
+    { label: "Báo cáo", path: "/tính_công/reporting" },
+    { label: "Giờ chấm công", path: "/tính_công/time_clock_hours" },
+    { label: "Hiện hành", path: "/tính_công/current_status" },
+    { label: "Thoát", path: "/tính_công/exit" }
   ];
 
   const customizationSubTaskbarItems = [
-    { label: "Option 1", path: "/customization/option1" },
-    { label: "Option 2", path: "/customization/option2" }
-  ];
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  return (
-    <div className="main-page">
-      
-      {isLoggedIn ? (
-        <>
-          <div className= "taskbar-container">
+    { label: "Phân quyền", path: "/tùy_chỉnh/phân_quyền" },
+    { label: "Sơ đồ", path: "/tùy_chỉnh/sơ_đồ" },
+    { label: "Nghỉ chế độ", path: "/tùy_chỉnh/nghỉ_chế_độ"},
+      { label: "Phép năm", path: "/tùy_chỉnh/phép_năm" },
+      { label: "Phân giờ", path: "/tùy_chỉnh/phân_giờ" },
+      { label: "Chọn dữ liệu", path: "/tùy_chỉnh/chọn_dữ_liệu" },
+      { label: "Xóa dữ liệu", path: "/tùy_chỉnh/xóa_dữ_liệu" },
+      { label: "Form", path: "/form-page" },
+      { label: "NodeRed", path: "/client-page" },
+      { label: "Search", path: "/search-page" }
+    ];
+  
+    if (loading) {
+      return <div>Loading...</div>;
+    }
+  
+    return (
+      <div className="main-page">
+        
+        {isLoggedIn ? (
+          <>
+            <div className="taskbar-container">
               <Taskbar items={taskbarItems} onSelect={handleTaskbarSelect} />
               <button onClick={logout}>Logout</button>
-          </div>
-          {selectedTaskbar && (
-            <SubTaskbar
-              items={
-                selectedTaskbar.label === "Attendance"
-                  ? attendanceSubTaskbarItems
-                  : customizationSubTaskbarItems
-              }
-            />
-          )}
-          
-          <div className="container-main-page">
+            </div>
+            {selectedTaskbar && (
+              <SubTaskbar
+                items={
+                  selectedTaskbar.label === "Tính công"
+                    ? attendanceSubTaskbarItems
+                    : customizationSubTaskbarItems
+                }
+                onSelect={handleSubTaskbarSelect} // Thêm callback để xử lý khi một tab được chọn
+              />
+            )}
+            
+            <div className="container-main-page">
+              {/* Hiển thị nội dung của các tab đang mở */}
+              {openTabs.map(tab => (
+                <div key={tab.path} className="tab-content">
+                  <div className="tab-header">
+                    {tab.label}
+                    <button onClick={() => handleCloseTab(tab.path)}>x</button>
+                  </div>
+                  <div className="tab-body">
+                    {renderTabContent(tab.path)}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </>
+        ) : (
+          <div className="flex items-center justify-center h-screen">
             <Routes>
-              <Route path="/form-page" element={<MyForm />} />
-              <Route path="/client-page" element={<MqttClient />} />
-              <Route path="/search-page" element={<Search />} />
-              <Route path="/attendance" element={<AttendancePage />} />
-              <Route path="/customization/*" element={<CustomizationPage />} />
+              <Route path="/form-salary-page" element={<Account />} />
             </Routes>
           </div>
-        </>
-      ) : (
-        <div className="flex items-center justify-center h-screen">
-          <Routes>
-            <Route path="/form-salary-page" element={<Account />} />
-          </Routes>
-        </div>
-      )}
-    </div>
-  );
-};
-
-export default MainPage;
+        )}
+      </div>
+    );
+  };
+  
+  export default MainPage;
+  
