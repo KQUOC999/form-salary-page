@@ -13,6 +13,7 @@
     "helmet": "^7.1.0",
     "mqtt": "^5.7.0",
     "react": "^18.3.1",
+    "react-helmet": "^6.1.0",
     "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1",
     "realm-web": "^2.0.0",
@@ -48,6 +49,8 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^6.1.1"
+    "gh-pages": "^6.1.1",
+    "webpack": "^5.91.0",
+    "webpack-dev-server": "^5.0.4"
   }
 }

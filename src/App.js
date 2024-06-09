@@ -1,8 +1,7 @@
 import React, { Suspense, useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import MainPage from './component/MainPage';
-import './index.css'
-import Helmet from "helmet";
+import './index.css';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -12,6 +11,11 @@ function App() {
     // Giả sử đã đăng nhập thành công
     setIsLoggedIn(true);
     setInitializing(false);
+
+    // Cập nhật các thẻ <head> khi component được mount
+    document.querySelector('meta[name="viewport"]').setAttribute('content', 'width=device-width, initial-scale=1');
+    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#000000');
+    document.title = "Your App Title";
   }, []);
 
   if (initializing) {
@@ -19,23 +23,17 @@ function App() {
   }
 
   return (
-    <>
-      <Helmet>
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline';" />
-        <meta http-equiv="Permissions-Policy" content="fullscreen=(self), geolocation=()" />
-      </Helmet>
-      <Router>
-        <Suspense fallback={<div>Loading....</div>}>
-          <Routes>
-            {!isLoggedIn ? (
-              <Route path="/*" element={<Navigate to="/form-salary-page" />} />
-            ) : (
-              <Route path="/*" element={<MainPage />} />
-            )}
-          </Routes>
-        </Suspense>
-      </Router>
-    </>
+    <Router>
+      <Suspense fallback={<div>Loading....</div>}>
+        <Routes>
+          {!isLoggedIn ? (
+            <Route path="/*" element={<Navigate to="/form-salary-page" />} />
+          ) : (
+            <Route path="/*" element={<MainPage />} />
+          )}
+        </Routes>
+      </Suspense>
+    </Router>
   );
 }
 
