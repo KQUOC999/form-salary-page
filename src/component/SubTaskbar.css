@@ -8,6 +8,7 @@
   --tab-header-active-bg: #bdc3c7;
   --button-bg: var(--primary-color);
   --button-hover-bg: #2980b9;
+  --items-hover-bg: #a5bbc9;
   --button-text-color: #fff;
 }
 .sub-taskbar {
@@ -16,34 +17,19 @@
   justify-content: space-between;
   background-color: #f8f9fa;
   padding: 10px;
-  border-bottom: 1px solid #ccc;
+  border-bottom: 0.2px solid #646262;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1); /* Thêm bóng chân */
 }
 
-.subTaskbar-items a {
-  margin: 0px;
-}
-
-.subTaskbar-items:last-child {
-  margin: none;
-}
-
-.subTaskbar-items a {
-  color: #333;
+.subTaskbar-items{
+  color: #070707;
   text-decoration: none;
   font-size: 14px;
+  padding: 5px 10px;
+  border-radius: 5px;
 }
 
-.sub-taskbar button {
-  background: none;
-  border: none;
-  color: var(--button-text-color);
-  padding: 10px;
+.subTaskbar-items:hover {
+  background-color: var(--items-hover-bg);
   cursor: pointer;
-  border-radius: 4px;
-}
-
-.sub-taskbar button:hover {
-  background-color: var(--button-hover-bg);
-  text-decoration: underline;
 }

@@ -2,6 +2,7 @@ import React, { useState} from 'react';
 import * as Realm from 'realm-web';
 import Form from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
+import video from '../../video/work.mp4'
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -58,6 +59,10 @@ const Account = () => {
 
   return (
     <div>
+       <video autoPlay loop muted className="background-video" onError={(e) => console.log('Video load error:', e)}>
+        <source src= {video} type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
       {user ? (
         <>
           {isLoggedIn && loading ? <p>Loading...</p> : <Account />}
