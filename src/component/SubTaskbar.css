@@ -19,14 +19,14 @@
   padding: 10px;
   border-bottom: 0.2px solid #646262;
   box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.1); /* Thêm bóng chân */
-  width: 100vw;
+  width: 100%;
 }
 
 .subTaskbar-items{
   color: #070707;
   text-decoration: none;
   font-size: 14px;
-  padding: 5px 10px;
+  padding: 0.5vw 0.5vw;
   border-radius: 5px;
 }
 
