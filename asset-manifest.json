@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/form-salary-page/static/css/main.9c04314e.css",
+    "main.css": "/form-salary-page/static/css/main.432d3ae8.css",
     "main.js": "/form-salary-page/static/js/main.5ef39514.js",
     "static/media/work.mp4": "/form-salary-page/static/media/work.0c4b3dca9b3b42ee254b.mp4",
     "index.html": "/form-salary-page/index.html",
-    "main.9c04314e.css.map": "/form-salary-page/static/css/main.9c04314e.css.map",
+    "main.432d3ae8.css.map": "/form-salary-page/static/css/main.432d3ae8.css.map",
     "main.5ef39514.js.map": "/form-salary-page/static/js/main.5ef39514.js.map"
   },
   "entrypoints": [
-    "static/css/main.9c04314e.css",
+    "static/css/main.432d3ae8.css",
     "static/js/main.5ef39514.js"
   ]
 }
