@@ -11,6 +11,7 @@ import MqttClient from "../routers/pages/nodeRed";
 import Search from "../routers/pages/search";
 import AttendancePage from "../routers/pages/AttendancePage";
 import CustomizationPage from "../routers/pages/CustomizationPage";
+import TreeStructure from "../routers/pages/Map/TreeStructure.js";
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -113,7 +114,9 @@ const MainPage = () => {
       case "/tính_công/current_status":
         return <AttendancePage />;
       case "/tùy_chỉnh/phân_quyền":
+        return null;
       case "/tùy_chỉnh/sơ_đồ":
+        return <TreeStructure />;
       case "/tùy_chỉnh/nghỉ_chế_độ":
       case "/tùy_chỉnh/phép_năm":
       case "/tùy_chỉnh/phân_giờ":

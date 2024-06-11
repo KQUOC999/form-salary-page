@@ -1,0 +1,103 @@
+/* all_router_page.css/map.css */
+.tab-pane {
+  display: none; /* Ẩn tất cả các tab theo mặc định */
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%; /* Đặt chiều rộng 100% để co giãn linh hoạt */
+  height: 100%; /* Đặt chiều cao 100% để co giãn linh hoạt */
+  border: 1px solid #ccc;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  padding: 10px;
+  overflow: auto;
+}
+
+.tab-pane.active {
+  display: block; /* Hiển thị tab khi được chọn */
+}
+
+.tab-pane .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+  background-color: #f8f9fa;
+  margin-bottom: 10px;
+}
+
+.tab-pane .header h4 {
+  margin: 0;
+}
+
+.tab-pane .header .btn-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.tab-pane .content {
+  padding: 10px;
+  height: calc(100% - 60px); /* Trừ đi chiều cao của header */
+  overflow-y: auto;
+}
+
+/*       Bên trái đường ngăn          */
+.tree {
+  display: flex;
+}
+
+.tree-content {
+  flex: 1;
+  padding: 10px;
+  border-right: 1px solid #ccc;
+  max-width: 10%; /* hoặc sử dụng các giá trị phần trăm (%) khác */
+  overflow-y: auto;
+  min-width: 100px; /* hoặc sử dụng các giá trị phần trăm (%) khác */
+}
+
+.tree-content ul {
+  list-style-type: none;
+  padding-left: 5px; /* Tăng khoảng cách lề trái */
+  margin-top: 10px; /* Tăng khoảng cách lề trên */
+  margin-bottom: 10px; /* Tăng khoảng cách lề dưới */
+  position: relative;
+}
+
+.tree-content li::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: -5px; /* Điều chỉnh vị trí của dấu gạch ngang */
+  border-top: 1px solid #484848; /* Sử dụng border-top để tạo dấu gạch ngang */
+  width: 10px; /* Độ dài của dấu gạch ngang */
+}
+
+
+.tree-content li:last-child::before {
+  height: 50%;
+}
+
+
+/*       Tab          */
+.btn-group-vertical {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 10px;
+}
+.btn{
+  text-align: center;
+}
+.btn-primary{
+  max-width: 100px;
+  width: 80%;
+  margin-bottom: 5px;
+  margin-right: 20px;
+  padding: 5px 5px;
+  border: solid 1px;
+}
+
+
