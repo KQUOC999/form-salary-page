@@ -11,16 +11,20 @@
     "boostrap": "^2.0.0",
     "bootstrap": "^5.3.3",
     "core-js": "^3.37.1",
+    "file-saver": "^2.0.5",
+    "formik": "^2.4.6",
     "helmet": "^7.1.0",
     "mqtt": "^5.7.0",
     "react": "^18.3.1",
     "react-helmet": "^6.1.0",
     "react-router-dom": "^6.23.1",
     "react-scripts": "^5.0.1",
+    "react-table": "^7.8.0",
     "realm-web": "^2.0.1",
     "util": "^0.12.5",
     "utils": "^0.3.1",
-    "web-vitals": "^4.0.1"
+    "web-vitals": "^4.0.1",
+    "xlsx": "^0.18.5"
   },
   "scripts": {
     "start": "react-scripts start",

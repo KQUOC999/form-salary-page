@@ -1,0 +1,125 @@
+.container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  max-width: 900px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.formSection {
+  margin-bottom: 20px;
+  padding: 20px;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.field-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.field-group > div {
+  flex: 1;
+  min-width: 150px;
+}
+
+.field-group label {
+  font-weight: bold;
+}
+
+.field-group input[type="text"],
+.field-group input[type="number"],
+.field-group input[type="time"] {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.radio-group {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.radio-group label {
+  display: flex;
+  align-items: center;
+}
+
+.radio-group input[type="radio"] {
+  margin-right: 5px;
+}
+
+.note {
+  background-color: #e9ecef;
+  padding: 10px;
+  border-left: 4px solid #007bff;
+  margin-top: 10px;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.addButton,
+.saveButton,
+.deleteButton,
+.exitButton {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  flex: 1;
+  margin: 0 10px;
+  text-align: center;
+}
+
+.addButton:hover,
+.saveButton:hover,
+.deleteButton:hover,
+.exitButton:hover {
+  background-color: #0056b3;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.table tr:hover {
+  background-color: #ddd;
+}
+
+.table-container {
+  overflow-x: auto;
+}

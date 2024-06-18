@@ -12,6 +12,12 @@ import Search from "../routers/pages/search";
 import AttendancePage from "../routers/pages/AttendancePage";
 import CustomizationPage from "../routers/pages/CustomizationPage";
 import TreeStructure from "../routers/pages/Map/TreeStructure.js";
+import TableWithFormsAndCheckboxes from "../routers/pages/Shift/createTableShift.js";
+import TimeKeepingMethod from "../routers/pages/TimeKeeping_Method/Method.js";
+import Schedule from "../routers/pages/Schedule/calendar.js";
+import EmployeeSchedule from "../routers/pages/Employee_Schedule/schedule.js";
+import MachineInformation from "../routers/pages/machine/information.js";
+import Reporting from "../routers/pages/Reporting/reporting.js";
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -102,15 +108,25 @@ const MainPage = () => {
       case "/search-page":
         return <Search />;
       case "/tính_công/employee":
+        return null;
       case "/tính_công/workshift":
+        return <TableWithFormsAndCheckboxes />;
       case "/tính_công/marking_scheme":
+        return <TimeKeepingMethod />;
       case "/tính_công/schedule":
+        return <Schedule />;
       case "/tính_công/employee_schedule":
+        return <EmployeeSchedule />;
       case "/tính_công/time_clock_machine":
+        return <MachineInformation />;
       case "/tính_công/MCC_connection":
+        return null;
       case "/tính_công/connect_multiple_devices":
+        return null;
       case "/tính_công/reporting":
+        return <Reporting />;
       case "/tính_công/time_clock_hours":
+        return null;
       case "/tính_công/current_status":
         return <AttendancePage />;
       case "/tùy_chỉnh/phân_quyền":
@@ -118,9 +134,13 @@ const MainPage = () => {
       case "/tùy_chỉnh/sơ_đồ":
         return <TreeStructure />;
       case "/tùy_chỉnh/nghỉ_chế_độ":
+        return null;
       case "/tùy_chỉnh/phép_năm":
+        return null;
       case "/tùy_chỉnh/phân_giờ":
+        return null;
       case "/tùy_chỉnh/chọn_dữ_liệu":
+        return null;
       case "/tùy_chỉnh/xóa_dữ_liệu":
         return <CustomizationPage />;
       default:

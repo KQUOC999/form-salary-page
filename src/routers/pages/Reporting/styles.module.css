@@ -1,0 +1,94 @@
+.container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  overflow-y: auto;
+  flex-grow: 1;
+  width: 100%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.flexContainer {
+  display: flex;
+}
+
+.flexContainerHalft {
+  display: block;
+  width: 100%;
+}
+
+.mapCompany {
+  width: 200px;
+  background-color: #e0e0e0;
+  padding: 10px;
+  margin-left: 10px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+}
+
+.scheduleList {
+  background-color: #e0e0e0;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  padding: 20px;
+  margin: 5px 10px 0 10px;
+  width: 95%;
+  overflow-x: auto;
+  position: relative;
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #e0e0e0;
+  table-layout: auto;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  border: 1px solid #302e2e;
+  padding: 8px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.scheduleTable th {
+  background-color: #f2f2f2;
+  border-bottom: 1.5px solid #181717;
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+
+
+.scheduleTable .selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.formSection {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  width: 95%;
+  margin: 0 10px 0 10px;
+}
+
+.resizer {
+  display: inline-block;
+  width: 10px;
+  cursor: col-resize;
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 4;
+}

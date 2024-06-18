@@ -14,8 +14,9 @@ const TreeStructure = () => {
     const [jsonSchemaCompanyPosition, setJsonSchemaCompanyPosition] = useState({});
     const [formData, setFormData] = useState({
         companyName: '',
-        departmentName: '',
-        positionName: '',
+        companyAreas: '',
+        companyDepartment: '',
+        companyPosition: '',
         employeeName: ''
     });
     const [activeTabs, setActiveTabs] = useState([]);
@@ -25,6 +26,9 @@ const TreeStructure = () => {
         try {
             const response = await user?.callFunction(functionName);
             const jsonSchema = response[0]?.public?.input?.jsonSchema;
+
+            console.log("response", response);
+            console.log("response", jsonSchema)
             if (jsonSchema) {
                 setSchemaState(jsonSchema);
                 localStorage.setItem(schemaKey, JSON.stringify(jsonSchema));
@@ -152,12 +156,12 @@ const TreeStructure = () => {
                         {formData.companyName || 'Tên công ty'}
                         <ul>
                             <li>
-                                {formData.departmentName || 'Tên phòng ban'}
+                                {formData.companyAreas || 'Khu vực'}
                                 <ul>
                                     <li>
-                                        {formData.positionName || 'Tên chức vụ'}
+                                        {formData.companyDepartment || 'Tên phòng ban'}
                                         <ul>
-                                            <li>{formData.employeeName || 'Tên nhân viên'}</li>
+                                            <li>{formData.companyPosition || 'Tên chức vụ'}</li>
                                         </ul>
                                     </li>
                                 </ul>
