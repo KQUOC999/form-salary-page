@@ -2,7 +2,10 @@
     padding: 20px;
     background-color: #f9f9f9;
     border-radius: 8px;
-    max-width: 900px;
+    margin: 0 auto;
+    overflow-y: auto;
+    flex-grow: 1;
+    width: 70%;
     margin: 0 auto;
     font-family: Arial, sans-serif;
   }
@@ -17,12 +20,14 @@
   }
   
   .scheduleList {
-    width: 300px;
     background-color: #e0e0e0;
     padding: 10px;
     margin-right: 20px;
     border-radius: 8px;
     border: 2px solid #ccc; /* Thêm viền cho khung bảng */
+    position: relative;
+    width: 40%;
+    overflow-x: auto;
   }
   
   .scheduleTable {
@@ -57,6 +62,8 @@
     background-color: #fff;
     border-radius: 8px;
     border: 2px solid #ccc; /* Thêm viền cho khung form */
+    width: 100%;
+    overflow-x: auto;
   }
   
   .buttonGroup {

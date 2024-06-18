@@ -1,8 +1,8 @@
 .container {
-  padding: 20px;
+  padding: 10px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
 }
@@ -17,10 +17,10 @@ h2 {
 }
 
 .scheduleList {
-  width: 400px;
+  width: 50%;
   background-color: #e0e0e0;
   padding: 10px;
-  margin-right: 20px;
+  margin-right: 10px;
   border-radius: 8px;
   border: 2px solid #ccc; /* Thêm viền cho khung bảng */
 }
@@ -53,10 +53,11 @@ h2 {
 
 .formSection {
   flex: 1;
-  padding: 20px;
+  padding: 10px;
   background-color: #fff;
   border-radius: 8px;
   border: 2px solid #ccc; /* Thêm viền cho khung form */
+  max-width: 50%;
 }
 
 .buttonGroup {

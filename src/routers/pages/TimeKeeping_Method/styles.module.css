@@ -2,8 +2,9 @@
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  max-width: 800px;
+  width: 70%;
   margin: 0 auto;
+  overflow-x: auto;
   font-family: Arial, sans-serif;
 }
 
@@ -13,11 +14,12 @@ h2 {
 }
 
 .formSection {
-  margin-bottom: 20px;
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
+  width: 95%;
+  margin: 0px 10px 0 10px;
 }
 
 .buttonGroup {
