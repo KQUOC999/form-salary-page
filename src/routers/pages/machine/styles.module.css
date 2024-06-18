@@ -1,87 +1,87 @@
 .container {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    margin: 0 auto;
-    overflow-y: auto;
-    flex-grow: 1;
-    width: 70%;
-    margin: 0 auto;
-    font-family: Arial, sans-serif;
-  }
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  width: 70%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  position: relative; /* Ensure relative positioning for absolute elements */
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.flexContainer {
+  display: flex;
+}
+
+.scheduleList {
+  background-color: #e0e0e0;
+  padding: 10px;
+  margin-right: 20px;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  width: 100%;
+  flex: 1;
   
-  h2 {
-    text-align: center;
-    margin-bottom: 20px;
-  }
-  
-  .flexContainer {
-    display: flex;
-  }
-  
-  .scheduleList {
-    background-color: #e0e0e0;
-    padding: 10px;
-    margin-right: 20px;
-    border-radius: 8px;
-    border: 2px solid #ccc; /* Thêm viền cho khung bảng */
-    position: relative;
-    width: 40%;
-    overflow-x: auto;
-  }
-  
-  .scheduleTable {
-    width: 100%;
-    border-collapse: collapse;
-    background-color: #e0e0e0;
-  }
-  
-  .scheduleTable th, .scheduleTable td {
-    border: 1px solid #1f1e1e; /* Thêm viền cho các ô */
-    padding: 8px;
-    text-align: left;
-  }
-  
-  .scheduleTable th {
-    background-color: #f2f2f2;
-    border-bottom: 1.5px solid #121010; /* Thêm viền dưới cho tiêu đề */
-  }
-  
-  .scheduleTable .selected {
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .scheduleTable .selected td:first-child {
-    text-align: center;
-  }
-  
-  .formSection {
-    flex: 1;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    border: 2px solid #ccc; /* Thêm viền cho khung form */
-    width: 100%;
-    overflow-x: auto;
-  }
-  
-  .buttonGroup {
-    display: flex;
-    justify-content: center;
-    gap: 20px;
-    margin-top: 20px;
-  }
-  
-  .buttonGroup button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    background-color: #007bff;
-    color: white;
-    cursor: pointer;
-  }
-  
-  .buttonGroup button:hover {
-    background-color: #0056b3;
-  }
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #e0e0e0;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  border: 1px solid #1f1e1e;
+  padding: 8px;
+  text-align: left;
+}
+
+.scheduleTable th {
+  background-color: #f2f2f2;
+  border-bottom: 1.5px solid #121010;
+}
+
+.scheduleTable .selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.scheduleTable .selected td:first-child {
+  text-align: center;
+}
+
+.formSection {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  width: 100%;
+}
+
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.buttonGroup button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+.buttonGroup button:hover {
+  background-color: #0056b3;
+}

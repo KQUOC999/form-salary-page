@@ -1,9 +1,10 @@
 .container {
-  padding: 10px;
+  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  max-width: 100%;
+  width: 70%;
   margin: 0 auto;
+  overflow-x: auto;
   font-family: Arial, sans-serif;
 }
 
@@ -52,12 +53,11 @@ h2 {
 }
 
 .formSection {
-  flex: 1;
   padding: 10px;
   background-color: #fff;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  border: 2px solid #ccc; /* Thêm viền cho khung form */
-  max-width: 50%;
+  width: 95%;
 }
 
 .buttonGroup {

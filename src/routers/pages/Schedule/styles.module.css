@@ -2,9 +2,11 @@
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
-  max-width: 70%;
+  width: 70%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  position: relative; /* Ensure relative positioning for absolute elements */
 }
 
 h2 {
@@ -17,11 +19,14 @@ h2 {
 }
 
 .scheduleList {
-  width: 25%;
   background-color: #e0e0e0;
   padding: 10px;
   margin-right: 20px;
   border-radius: 8px;
+  border: 2px solid #ccc;
+  width: 100%;
+  flex: 1;
+  
 }
 
 .scheduleTable {
@@ -30,14 +35,16 @@ h2 {
   background-color: #e0e0e0;
 }
 
-.scheduleTable th, .scheduleTable td {
-  border: 1px solid #1b1919;
+.scheduleTable th,
+.scheduleTable td {
+  border: 1px solid #1f1e1e;
   padding: 8px;
   text-align: left;
 }
 
 .scheduleTable th {
   background-color: #f2f2f2;
+  border-bottom: 1.5px solid #121010;
 }
 
 .scheduleTable .selected {
@@ -54,8 +61,10 @@ h2 {
   padding: 20px;
   background-color: #fff;
   border-radius: 8px;
-  max-width: auto;
+  border: 2px solid #ccc;
+  width: 100%;
 }
+
 
 .buttonGroup {
   display: flex;

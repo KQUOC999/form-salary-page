@@ -19,7 +19,7 @@ h2 {
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 95%;
-  margin: 0px 10px 0 10px;
+  margin: 0 10px;
 }
 
 .buttonGroup {
@@ -40,12 +40,14 @@ h2 {
   flex: 1;
   margin: 0 10px;
   text-align: center;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .addButton:hover,
 .saveButton:hover,
 .deleteButton:hover {
   background-color: #0056b3;
+  transform: scale(1.05);
 }
 
 .customFormClass {
@@ -65,7 +67,7 @@ h2 {
 }
 
 .customFieldClass input {
-  width: 100%;
+  width: 90%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -82,4 +84,49 @@ h2 {
   padding: 10px;
   border-left: 4px solid #007bff;
   margin-top: 10px;
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.scheduleTable th {
+  background-color: #f2f2f2;
+  cursor: pointer;
+  position: relative;
+  user-select: none;
+}
+
+.scheduleTable th .resizer {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 5px;
+  height: 100%;
+  cursor: col-resize;
+  background-color: transparent;
+  z-index: 1;
+  transition: background-color 0.3s;
+}
+
+.scheduleTable th .resizer:hover {
+  background-color: #007bff;
+}
+
+.scheduleTable th.resizing {
+  background-color: #f1f1f1;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  transition: width 0.2s ease;
 }
