@@ -15,15 +15,20 @@ h2 {
 
 .flexContainer {
   display: flex;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  gap: 20px; /* Add gap between flex items */
+  justify-content: space-between; /* Distribute space between items */
 }
 
-.scheduleList {
-  width: 50%;
+.scheduleList,
+.formSection {
+  flex: 1; /* Allow both sections to grow and shrink equally */
   background-color: #e0e0e0;
   padding: 10px;
-  margin-right: 10px;
   border-radius: 8px;
-  border: 2px solid #ccc; /* Thêm viền cho khung bảng */
+  border: 2px solid #ccc; /* Add border */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  min-width: 280px; /* Ensure a minimum width to prevent collapsing */
 }
 
 .scheduleTable {
@@ -33,14 +38,14 @@ h2 {
 }
 
 .scheduleTable th, .scheduleTable td {
-  border: 1px solid #484343; /* Thêm viền cho các ô */
+  border: 1px solid #484343; /* Add border to cells */
   padding: 8px;
   text-align: left;
 }
 
 .scheduleTable th {
   background-color: #f2f2f2;
-  border-bottom: 1.5px solid #232020; /* Thêm viền dưới cho tiêu đề */
+  border-bottom: 1.5px solid #232020; /* Add border to the bottom of header */
 }
 
 .scheduleTable .selected {
@@ -53,11 +58,7 @@ h2 {
 }
 
 .formSection {
-  padding: 10px;
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  width: 95%;
 }
 
 .buttonGroup {

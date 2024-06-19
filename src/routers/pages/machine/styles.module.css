@@ -16,17 +16,20 @@ h2 {
 
 .flexContainer {
   display: flex;
+  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  gap: 20px; /* Add gap between flex items */
+  justify-content: space-between; /* Distribute space between items */
 }
 
-.scheduleList {
+.scheduleList,
+.formSection {
+  flex: 1; /* Allow both sections to grow and shrink equally */
   background-color: #e0e0e0;
   padding: 10px;
-  margin-right: 20px;
   border-radius: 8px;
-  border: 2px solid #ccc;
-  width: 100%;
-  flex: 1;
-  
+  border: 2px solid #ccc; /* Add border */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  min-width: 280px; /* Ensure a minimum width to prevent collapsing */
 }
 
 .scheduleTable {

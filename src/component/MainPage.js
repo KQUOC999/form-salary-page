@@ -119,8 +119,6 @@ const MainPage = () => {
         return <EmployeeSchedule />;
       case "/tính_công/time_clock_machine":
         return <MachineInformation />;
-      case "/tính_công/MCC_connection":
-        return null;
       case "/tính_công/connect_multiple_devices":
         return null;
       case "/tính_công/reporting":
@@ -160,7 +158,6 @@ const MainPage = () => {
     { label: "Lịch trình", path: "/tính_công/schedule" },
     { label: "Lịch nhân viên", path: "/tính_công/employee_schedule" },
     { label: "Máy chấm công", path: "/tính_công/time_clock_machine" },
-    { label: "Kết nối MCC", path: "/tính_công/MCC_connection" },
     { label: "Kết nối nhiều thiết bị", path: "/tính_công/connect_multiple_devices" },
     { label: "Báo cáo", path: "/tính_công/reporting" },
     { label: "Giờ chấm công", path: "/tính_công/time_clock_hours" },
