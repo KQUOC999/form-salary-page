@@ -18,6 +18,9 @@ import Schedule from "../routers/pages/Schedule/calendar.js";
 import EmployeeSchedule from "../routers/pages/Employee_Schedule/schedule.js";
 import MachineInformation from "../routers/pages/machine/information.js";
 import Reporting from "../routers/pages/Reporting/reporting.js";
+import Time from "../routers/pages/TimeKeeping_Time/Time.js";
+import ManagerEmployee from "../routers/pages/Manager_employee/manager_employee.js";
+
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -108,7 +111,7 @@ const MainPage = () => {
       case "/search-page":
         return <Search />;
       case "/tính_công/employee":
-        return null;
+        return <ManagerEmployee />;
       case "/tính_công/workshift":
         return <TableWithFormsAndCheckboxes />;
       case "/tính_công/marking_scheme":
@@ -124,7 +127,7 @@ const MainPage = () => {
       case "/tính_công/reporting":
         return <Reporting />;
       case "/tính_công/time_clock_hours":
-        return null;
+        return <Time />;
       case "/tính_công/current_status":
         return <AttendancePage />;
       case "/tùy_chỉnh/phân_quyền":

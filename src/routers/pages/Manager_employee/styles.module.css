@@ -1,0 +1,101 @@
+.container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  overflow-x: auto; /* Enable horizontal scrolling */
+  position: relative; /* Ensure relative positioning for absolute elements */
+  display: flex;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.containerLeft{
+  flex-shrink: 0;
+  display: block;
+  background-color: #e0e0e0;
+  width: 200px;
+  margin-right: 10px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.containerRight{
+  display: block;
+  background-color: #e0e0e0;
+  width: 100%;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.flexContainer {
+  gap: 20px; /* Add gap between flex items */
+  justify-content: space-between; /* Distribute space between items */
+}
+
+.buttonGroup {
+  padding: 20px;
+  border-radius: 8px;
+  display: flex;
+  background-color: none;
+  margin-bottom: 10px;
+}
+
+.button{
+  padding: 5px 10px;
+  border-radius: 5px;
+  margin-right: 10px;
+  cursor: pointer;
+  border: 1px solid #302e2e;
+}
+
+.scheduleList,
+.formSection {
+  flex: 1; /* Allow both sections to grow and shrink equally */
+  background-color: #e0e0e0;
+  padding: 10px;
+  border-radius: 8px;
+  border: 2px solid #ccc; /* Add border */
+  box-sizing: border-box; /* Include padding and border in the element's total width and height */
+  min-width: 280px; /* Ensure a minimum width to prevent collapsing */
+  margin-top: 10px;
+}
+
+.scheduleTable {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #e0e0e0;
+}
+
+.scheduleTable th,
+.scheduleTable td {
+  border: 1px solid #1f1e1e;
+  padding: 8px;
+  text-align: center;
+}
+
+.scheduleTable th {
+  background-color: #f2f2f2;
+  border-bottom: 1.5px solid #121010;
+}
+
+.scheduleTable .selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.scheduleTable .selected td:first-child {
+  text-align: center;
+}
+
+.formSection {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  border: 2px solid #ccc;
+  width: 100%;
+}
