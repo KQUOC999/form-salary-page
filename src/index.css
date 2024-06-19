@@ -66,8 +66,7 @@
   padding: 20px;
   border-radius: 10px;
   color: white;
-  max-width: 350px;
-  width: 100%;
+  width: 350px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
   box-sizing: border-box;
   margin: 20px; /* Đảm bảo form có khoảng cách nhất định khi co lại */
