@@ -16,7 +16,7 @@ h2 {
 
 .flexContainer {
   display: flex;
-  flex-wrap: wrap; /* Allow wrapping for smaller screens */
+  flex-shrink: 0; /* Allow wrapping for smaller screens */
   gap: 20px; /* Add gap between flex items */
   justify-content: space-between; /* Distribute space between items */
 }

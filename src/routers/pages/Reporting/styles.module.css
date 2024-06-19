@@ -29,6 +29,7 @@ h2 {
   margin-left: 10px;
   border-radius: 8px;
   border: 2px solid #ccc;
+  flex-shrink: 0; /* Ngăn không cho phần này co lại khi không còn đủ không gian */
 }
 
 .scheduleList {
