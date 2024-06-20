@@ -21,7 +21,6 @@ import Reporting from "../routers/pages/report/reporting.js";
 import TimeClock from "../routers/pages/times_timekeeping/Time.js";
 import ManagerEmployee from "../routers/pages/manager_employee/manager_employee.js";
 
-
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
 const MainPage = () => {
@@ -30,7 +29,8 @@ const MainPage = () => {
   const [currentUser, setCurrentUser] = useState(app.currentUser);
   const [, setRole] = useState('');
   const [selectedTaskbar, setSelectedTaskbar] = useState(null);
-  const [openTabs, setOpenTabs] = useState([]); // State mới để lưu trữ danh sách các tab đang mở
+  const [openTabs, setOpenTabs] = useState([]); // State to store open tabs
+  const [activeTab, setActiveTab] = useState(null); // State to store the currently active tab
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -49,6 +49,9 @@ const MainPage = () => {
 
     const storedTabs = JSON.parse(localStorage.getItem('openTabs') || '[]');
     setOpenTabs(storedTabs);
+    if (storedTabs.length > 0) {
+      setActiveTab(storedTabs[0]);
+    }
   }, []);
 
   const checkUserRole = async (user) => {
@@ -86,24 +89,32 @@ const MainPage = () => {
 
   const handleSubTaskbarSelect = (subTaskbarItem) => {
     setOpenTabs(prevTabs => {
+      // Remove existing tab if it exists
       const updatedTabs = prevTabs.filter(tab => tab.path !== subTaskbarItem.path);
       const newTabs = [subTaskbarItem, ...updatedTabs];
       localStorage.setItem('openTabs', JSON.stringify(newTabs));
+      setActiveTab(subTaskbarItem);
       return newTabs;
     });
   };
 
   const handleCloseTab = (tabPath) => {
-    // Loại bỏ tab bằng cách lọc ra các tab không phải là tab đó
     const updatedTabs = openTabs.filter(tab => tab.path !== tabPath);
     setOpenTabs(updatedTabs);
-    
-    // Lưu trạng thái mới của các tab mở vào localStorage
     localStorage.setItem('openTabs', JSON.stringify(updatedTabs));
+
+    // If the closed tab was the active tab, set the next available tab as active
+    if (activeTab && activeTab.path === tabPath && updatedTabs.length > 0) {
+      setActiveTab(updatedTabs[0]);
+    } else if (updatedTabs.length === 0) {
+      setActiveTab(null);
+    }
   };
 
-  const renderTabContent = (path) => {
-    switch(path) {
+  const renderTabContent = () => {
+    if (!activeTab) return null; // No active tab
+
+    switch(activeTab.path) {
       case "/form-page":
         return <MyForm />;
       case "/client-page":
@@ -187,7 +198,6 @@ const MainPage = () => {
 
   return (
     <div className="main-page">
-      
       {isLoggedIn ? (
         <>
           <div className="taskbar-container">
@@ -201,23 +211,33 @@ const MainPage = () => {
                   ? attendanceSubTaskbarItems
                   : customizationSubTaskbarItems
               }
-              onSelect={handleSubTaskbarSelect} // Thêm callback để xử lý khi một tab được chọn
+              onSelect={handleSubTaskbarSelect}
             />
           )}
           
           <div className="container-main-page">
-            {/* Hiển thị nội dung của các tab đang mở */}
-            {openTabs.map(tab => (
-              <div key={tab.path} className="tab-content">
-                <div className="tab-header">
-                  {tab.label}
+            {/* Display list of open tabs horizontally */}
+            <div className="open-tabs">
+              {openTabs.reverse().map(tab => (
+                <div key={tab.path} className="tab-item">
+                  <span
+                    className={`tab-label ${tab.path === activeTab?.path ? 'active' : ''}`}
+                    onClick={() => setActiveTab(tab)}
+                  >
+                    {tab.label}
+                  </span>
                   <button onClick={() => handleCloseTab(tab.path)}>x</button>
                 </div>
+              ))}
+            </div>
+            {/* Display content of the active tab */}
+            {activeTab && (
+              <div className="tab-content">
                 <div className="tab-body">
-                  {renderTabContent(tab.path)}
+                  {renderTabContent()}
                 </div>
               </div>
-            ))}
+            )}
           </div>
         </>
       ) : (
