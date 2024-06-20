@@ -133,8 +133,6 @@ const MainPage = () => {
         return <EmployeeSchedule />;
       case "/tính_công/time_clock_machine":
         return <MachineInformation />;
-      case "/tính_công/connect_multiple_devices":
-        return null;
       case "/tính_công/reporting":
         return <Reporting />;
       case "/tính_công/time_clock_hours":
@@ -172,11 +170,9 @@ const MainPage = () => {
     { label: "Lịch trình", path: "/tính_công/schedule" },
     { label: "Lịch nhân viên", path: "/tính_công/employee_schedule" },
     { label: "Máy chấm công", path: "/tính_công/time_clock_machine" },
-    { label: "Kết nối nhiều thiết bị", path: "/tính_công/connect_multiple_devices" },
     { label: "Báo cáo", path: "/tính_công/reporting" },
     { label: "Giờ chấm công", path: "/tính_công/time_clock_hours" },
-    { label: "Hiện hành", path: "/tính_công/current_status" },
-    { label: "Thoát", path: "/tính_công/exit" }
+    { label: "Hiện hành", path: "/tính_công/current_status" }
   ];
 
   const customizationSubTaskbarItems = [
@@ -186,7 +182,6 @@ const MainPage = () => {
     { label: "Phép năm", path: "/tùy_chỉnh/phép_năm" },
     { label: "Phân giờ", path: "/tùy_chỉnh/phân_giờ" },
     { label: "Chọn dữ liệu", path: "/tùy_chỉnh/chọn_dữ_liệu" },
-    { label: "Xóa dữ liệu", path: "/tùy_chỉnh/xóa_dữ_liệu" },
     { label: "Form", path: "/form-page" },
     { label: "NodeRed", path: "/client-page" },
     { label: "Search", path: "/search-page" }
