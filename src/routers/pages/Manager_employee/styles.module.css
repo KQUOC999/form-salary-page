@@ -6,16 +6,18 @@
   font-family: Arial, sans-serif;
   overflow-x: auto; /* Enable horizontal scrolling */
   position: relative; /* Ensure relative positioning for absolute elements */
+  max-width: 1200px; /* Set a maximum width for the container */
   display: flex;
+  flex-direction: row; /* Stack elements horizontally */
 }
 
 h2 {
   text-align: center;
   margin-bottom: 20px;
 }
-.containerLeft{
+
+.containerLeft {
   flex-shrink: 0;
-  display: block;
   background-color: #e0e0e0;
   width: 200px;
   margin-right: 10px;
@@ -23,33 +25,33 @@ h2 {
   border-radius: 8px;
 }
 
-.containerRight{
-  display: block;
+.containerRight {
+  flex-grow: 1;
   background-color: #e0e0e0;
-  width: 100%;
   padding: 20px;
   border-radius: 8px;
 }
 
 .flexContainer {
+  display: flex;
+  flex-direction: column;
   gap: 20px; /* Add gap between flex items */
   justify-content: space-between; /* Distribute space between items */
 }
 
 .buttonGroup {
-  padding: 20px;
-  border-radius: 8px;
   display: flex;
-  background-color: none;
-  margin-bottom: 10px;
+  flex-wrap: wrap; /* Allow buttons to wrap */
+  gap: 10px; /* Add gap between buttons */
+  margin-bottom: 20px;
 }
 
-.button{
+.button {
   padding: 5px 10px;
   border-radius: 5px;
-  margin-right: 10px;
   cursor: pointer;
   border: 1px solid #302e2e;
+  background-color: #ffffff;
 }
 
 .scheduleList,
