@@ -3,7 +3,7 @@ import Form from "@rjsf/core";
 import * as Realm from 'realm-web';
 import validator from '@rjsf/validator-ajv8';
 import styles from './styles.module.css'; // Import CSS Module
-import uiSchema from '../Schedule/uiSchema';;
+import uiSchema from '../schedules/uiSchema';;
 
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });

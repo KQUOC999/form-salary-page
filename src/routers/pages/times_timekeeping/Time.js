@@ -9,7 +9,7 @@ import { saveAs } from 'file-saver'; // Import file-saver library
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
-const Time = () => {
+const TimeClock = () => {
   const [jsonSchema, setJsonSchema] = useState(null);
   const [formData, setFormData] = useState([]);
   const [currentData, setCurrentData] = useState({});
@@ -184,4 +184,4 @@ const Time = () => {
   );
 };
 
-export default Time;
+export default TimeClock;

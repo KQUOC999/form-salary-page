@@ -6,6 +6,7 @@ body,
   height: 100%;
   margin: 0;
   padding: 0;
+  scroll-behavior: smooth;
 }
 
 /* Đảm bảo chiều rộng và chiều cao của các phần tử chính của trang là 100% */

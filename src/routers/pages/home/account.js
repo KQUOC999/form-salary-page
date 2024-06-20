@@ -2,7 +2,7 @@ import React, { useState} from 'react';
 import * as Realm from 'realm-web';
 import Form from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
-import video from '../../video/work.mp4'
+import video from '../../../video/work.mp4'
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 

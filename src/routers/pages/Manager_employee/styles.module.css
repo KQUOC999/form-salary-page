@@ -6,7 +6,7 @@
   font-family: Arial, sans-serif;
   overflow-x: auto; /* Enable horizontal scrolling */
   position: relative; /* Ensure relative positioning for absolute elements */
-  max-width: 1200px; /* Set a maximum width for the container */
+  max-width: 70%; /* Set a maximum width for the container */
   display: flex;
   flex-direction: row; /* Stack elements horizontally */
 }

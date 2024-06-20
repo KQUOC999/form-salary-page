@@ -5,21 +5,21 @@ import './MainPage.css';
 
 import Taskbar from "../component/T_MainTaskbar.js";
 import SubTaskbar from "../component/SubTaskbar.js";
-import Account from "../routers/pages/account";
-import MyForm from "../routers/pages/form";
-import MqttClient from "../routers/pages/nodeRed";
-import Search from "../routers/pages/search";
-import AttendancePage from "../routers/pages/AttendancePage";
-import CustomizationPage from "../routers/pages/CustomizationPage";
-import TreeStructure from "../routers/pages/Map/TreeStructure.js";
-import TableWithFormsAndCheckboxes from "../routers/pages/Shift/createTableShift.js";
-import TimeKeepingMethod from "../routers/pages/TimeKeeping_Method/Method.js";
-import Schedule from "../routers/pages/Schedule/calendar.js";
-import EmployeeSchedule from "../routers/pages/Employee_Schedule/schedule.js";
+import Account from "../routers/pages/home/account.js";
+import MyForm from "../routers/pages/home/form.js";
+import MqttClient from "../routers/pages/home/nodeRed.js";
+import Search from "../routers/pages/home/search.js";
+import AttendancePage from "../routers/pages/home/AttendancePage.js";
+import CustomizationPage from "../routers/pages/home/CustomizationPage.js";
+import TreeStructure from "../routers/pages/map/TreeStructure.js";
+import TableWithFormsAndCheckboxes from "../routers/pages/shift/createTableShift.js";
+import TimeKeepingMethod from "../routers/pages/method_timekeeping/Method.js";
+import Schedule from "../routers/pages/schedules/calendar.js";
+import EmployeeSchedule from "../routers/pages/employee_Schedule/schedule.js";
 import MachineInformation from "../routers/pages/machine/information.js";
-import Reporting from "../routers/pages/Reporting/reporting.js";
-import Time from "../routers/pages/TimeKeeping_Time/Time.js";
-import ManagerEmployee from "../routers/pages/Manager_employee/manager_employee.js";
+import Reporting from "../routers/pages/report/reporting.js";
+import TimeClock from "../routers/pages/times_timekeeping/Time.js";
+import ManagerEmployee from "../routers/pages/manager_employee/manager_employee.js";
 
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
@@ -127,7 +127,7 @@ const MainPage = () => {
       case "/tính_công/reporting":
         return <Reporting />;
       case "/tính_công/time_clock_hours":
-        return <Time />;
+        return <TimeClock />;
       case "/tính_công/current_status":
         return <AttendancePage />;
       case "/tùy_chỉnh/phân_quyền":
