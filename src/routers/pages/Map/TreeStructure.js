@@ -3,6 +3,8 @@ import * as Realm from 'realm-web';
 import alertSound from '../../../sound/windows-10-notification.mp3';
 import '../all_router_page.css/map.css';
 import TreeForm from './TreeForm';
+import 'react-treeview/react-treeview.css';
+import CompanyStructure from '../structureCompany.module/companyStructure'
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 const user = app.currentUser;
@@ -12,6 +14,7 @@ const TreeStructure = () => {
     const [jsonSchemaCompanyAreas, setJsonSchemaCompanyAreas] = useState({});
     const [jsonSchemaCompanyDepartment, setJsonSchemaCompanyDepartment] = useState({});
     const [jsonSchemaCompanyPosition, setJsonSchemaCompanyPosition] = useState({});
+
     const [formData, setFormData] = useState({
         companyName: '',
         companyAreas: '',
@@ -144,92 +147,75 @@ const TreeStructure = () => {
         console.log("Dữ liệu đã submit:", data);
     };
 
+      
     if (!user) {
         return <div>Loading...</div>;
     }
 
     return (
-        <div className="tree">
-            <div className="tree-content">
-                <ul>
-                    <li>
-                        {formData.companyName || 'Tên công ty'}
-                        <ul>
-                            <li>
-                                {formData.companyAreas || 'Khu vực'}
-                                <ul>
-                                    <li>
-                                        {formData.companyDepartment || 'Tên phòng ban'}
-                                        <ul>
-                                            <li>{formData.companyPosition || 'Tên chức vụ'}</li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
+        <div className="tree" style={{ display: 'flex', width: '100%', overflowX: 'auto' }}>
+            <div className="tree_content"style={{ position: 'relative', width: '15%', padding: '10px', minWidth: '200px', border: '1px solid #ddd', borderRadius: '5px'}}>
+                <CompanyStructure user={user} />
             </div>
-
-            <div style={{ flex: 3, padding: '10px', position: 'relative', borderLeft: '1px solid #ccc', overflowY: 'auto' }}>
-                <div className="btn-group-vertical" style={{ marginBottom: '10px'}}>
-                    <button className='btn-primary' onClick={() => handleOpenTab('companyName')}>Công ty</button>
-                    <button className='btn-primary' onClick={() => handleOpenTab('companyAreas')}>Khu vực</button>
-                    <button className='btn-primary' onClick={() => handleOpenTab('companyDepartment')}>Phòng ban</button>
-                    <button className='btn-primary' onClick={() => handleOpenTab('companyPosition')}>Chức vụ</button>
+            <div className='form_container' style={{ flex: 3, padding: '10px', position: 'relative', borderLeft: '1px solid #ccc', minWidth: '400px', border: '1px solid #ddd', margin: '0px 10px 10px 10px', borderRadius: '5px', boxShadow: '0px 10px 20px rgba(0, 0, 0, 0.2)' }}>
+                <div className="btn-group-vertical" style={{ display: 'flex'}}>
+                    <button className='btn_primary' style= {{padding: '5px 15px', margin: '0 20px', cursor: 'pointer'}} onClick={() => handleOpenTab('companyName')}>Công ty</button>
+                    <button className='btn_primary' style= {{padding: '5px 15px', marginRight: '20px', cursor: 'pointer'}} onClick={() => handleOpenTab('companyAreas')}>Khu vực</button>
+                    <button className='btn_primary' style= {{padding: '5px 15px', marginRight: '20px', cursor: 'pointer'}} onClick={() => handleOpenTab('companyDepartment')}>Phòng ban</button>
+                    <button className='btn_primary' style= {{padding: '5px 15px', marginRight: '20px', cursor: 'pointer'}} onClick={() => handleOpenTab('companyPosition')}>Chức vụ</button>
                 </div>
-                <div className="tab-content" style={{ position: 'relative', height: '400px'}}>
-                    {activeTabs.map(tab => (
-                        <div
-                            key={tab}
-                            id={tab}
-                            className={`tab-pane ${selectedTab === tab ? 'active' : ''}`}
+                <div className="tab-content" style={{ position: 'relative', height: '400px', overflowY: 'auto'}}>
+                {activeTabs.map(tab => (
+                    <div
+                        key={tab}
+                        id={tab}
+                        style={selectedTab === tab ? { display: 'block', border: '1px solid #ddd', padding: '10px', borderRadius: '5px', boxShadow: '0 0 5px rgba(0, 0, 0, 0.2)', margin: '10px 10px 10px 10px'} : { display: 'none' }}
                         >
-                            <div className="header">
-                                <h4>{tab}</h4>
-                                <button
-                                    className="btn btn-danger btn-close"
-                                    onClick={() => handleCloseTab(tab)}
-                                >
-                                    &times;
-                                </button>
-                            </div>
-                            <div className="content">
-                                {tab === 'companyName' && (
-                                    <TreeForm
-                                        jsonSchema={jsonSchemaCompanyName}
-                                        onSubmit={handleSubmit}
-                                        formType="companyName"
-                                    />
-                                )}
-                                {tab === 'companyAreas' && (
-                                    <TreeForm
-                                        jsonSchema={jsonSchemaCompanyAreas}
-                                        onSubmit={handleSubmit}
-                                        formType="companyAreas"
-                                    />
-                                )}
-                                {tab === 'companyDepartment' && (
-                                    <TreeForm
-                                        jsonSchema={jsonSchemaCompanyDepartment}
-                                        onSubmit={handleSubmit}
-                                        formType="companyDepartment"
-                                    />
-                                )}
-                                {tab === 'companyPosition' && (
-                                    <TreeForm
-                                        jsonSchema={jsonSchemaCompanyPosition}
-                                        onSubmit={handleSubmit}
-                                        formType="companyPosition"
-                                    />
-                                )}
-                            </div>
+                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: '10px', borderBottom: '1px solid #ccc', marginBottom: '10px' }}>
+                            <h4>{tab}</h4>
+                            <button
+                            style={{ background: 'none', border: 'none', fontSize: '1.5rem', lineHeight: '1', cursor: 'pointer' }}
+                            onClick={() => handleCloseTab(tab)}
+                            >
+                            &times;
+                            </button>
+                        </div>
+                        <div style= {{marginBottom: '10px'}}>
+                            {tab === 'companyName' && (
+                            <TreeForm
+                                jsonSchema={jsonSchemaCompanyName}
+                                onSubmit={handleSubmit}
+                                formType="companyName"
+                            />
+                            )}
+                            {tab === 'companyAreas' && (
+                            <TreeForm
+                                jsonSchema={jsonSchemaCompanyAreas}
+                                onSubmit={handleSubmit}
+                                formType="companyAreas"
+                            />
+                            )}
+                            {tab === 'companyDepartment' && (
+                            <TreeForm
+                                jsonSchema={jsonSchemaCompanyDepartment}
+                                onSubmit={handleSubmit}
+                                formType="companyDepartment"
+                            />
+                            )}
+                            {tab === 'companyPosition' && (
+                            <TreeForm
+                                jsonSchema={jsonSchemaCompanyPosition}
+                                onSubmit={handleSubmit}
+                                formType="companyPosition"
+                            />
+                            )}
+                        </div>
                         </div>
                     ))}
+                    </div>
                 </div>
             </div>
-        </div>
-    );
-};
+        );
+}
 
 export default TreeStructure;

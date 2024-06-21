@@ -6,6 +6,7 @@ import styles from './styles.module.css'; // Import CSS Module
 import uiSchema from './uiSchema'; // Adjust this path according to your project structure
 import * as XLSX from 'xlsx'; // Import XLSX library
 import { saveAs } from 'file-saver'; // Import file-saver library
+import CompanyStructure from '../structureCompany.module/companyStructure'
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -115,7 +116,7 @@ const TimeClock = () => {
       <h2>Giờ chấm công</h2>
       <div className={styles.flexContainer}>
         <div className={styles.mapCompany}>
-          Something
+          <CompanyStructure user={app.currentUser} />
         </div>
         <div className={styles.flexContainerHalft}>
           <div className={styles.flexContainerChild}>

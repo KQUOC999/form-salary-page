@@ -20,6 +20,7 @@ import MachineInformation from "../routers/pages/machine/information.js";
 import Reporting from "../routers/pages/report/reporting.js";
 import TimeClock from "../routers/pages/times_timekeeping/Time.js";
 import ManagerEmployee from "../routers/pages/manager_employee/manager_employee.js";
+import TreeViewComponent from "../routers/pages/devices/device_One/connect.js";
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -140,7 +141,7 @@ const MainPage = () => {
       case "/tính_công/current_status":
         return <AttendancePage />;
       case "/tùy_chỉnh/phân_quyền":
-        return null;
+        return <TreeViewComponent />;
       case "/tùy_chỉnh/sơ_đồ":
         return <TreeStructure />;
       case "/tùy_chỉnh/nghỉ_chế_độ":

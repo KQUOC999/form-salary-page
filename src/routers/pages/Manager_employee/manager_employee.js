@@ -3,7 +3,8 @@ import Form from "@rjsf/core";
 import * as Realm from 'realm-web';
 import validator from '@rjsf/validator-ajv8';
 import styles from './styles.module.css'; // Import CSS Module
-import uiSchema from '../schedules/uiSchema';;
+import uiSchema from '../schedules/uiSchema';
+import CompanyStructure from '../structureCompany.module/companyStructure'
 
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
@@ -91,7 +92,7 @@ const ManagerEmployee = () => {
   return (
     <div className={styles.container}>
       <div className={styles.containerLeft}>
-        <div>company</div>
+        <CompanyStructure user={app.currentUser} />
       </div>
       <div className={styles.containerRight}>
         <div className={styles.flexContainer}>
