@@ -2,7 +2,8 @@ import React, { useState} from 'react';
 import * as Realm from 'realm-web';
 import Form from '@rjsf/core';
 import validator from '@rjsf/validator-ajv8';
-import video from '../../../video/work.mp4'
+import video from '../../../video/work.mp4';
+import styles from './styles.module.css'
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -68,34 +69,36 @@ const Account = () => {
           {isLoggedIn && loading ? <p>Loading...</p> : <Account />}
         </>
       ) : (
-        <div className="overlay-container">
-          <div className="overlay-content">
-            <div className="container_form">
-              {!showRegisterForm ? (
-                <>
-                  <button className="button1" onClick={() => setShowRegisterForm(true)}>
-                    Đăng ký
-                  </button>
-                  <Form
-                    className="custom-form"
-                    schema={loginSchema}
-                    validator={validator}
-                    onSubmit={login}
-                  />
-                </>
-              ) : (
-                <>
-                  <button className="button1" onClick={() => setShowRegisterForm(false)}>
-                    Quay lại
-                  </button>
-                  <Form
-                    className="custom-form"
-                    schema={schema}
-                    validator={validator}
-                    onSubmit={register}
-                  />
-                </>
-              )}
+        <div className={styles.center_wrapper}>
+          <div className={styles.overlay_container}>
+            <div className={styles.overlay_content}>
+              <div className={styles.container_form}>
+                {!showRegisterForm ? (
+                  <>
+                    <button className={styles.button1} onClick={() => setShowRegisterForm(true)}>
+                      Đăng ký
+                    </button>
+                    <Form
+                      className={styles.custom_form}
+                      schema={loginSchema}
+                      validator={validator}
+                      onSubmit={login}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <button className={styles.button1} onClick={() => setShowRegisterForm(false)}>
+                      Quay lại
+                    </button>
+                    <Form
+                      className={styles.custom_form}
+                      schema={schema}
+                      validator={validator}
+                      onSubmit={register}
+                    />
+                  </>
+                )}
+              </div>
             </div>
           </div>
         </div>
