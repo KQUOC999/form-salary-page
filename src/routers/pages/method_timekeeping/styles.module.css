@@ -20,6 +20,7 @@ h2 {
   border-radius: 8px;
   width: 95%;
   margin: 0 10px;
+  min-width: 350px;
 }
 
 .buttonGroup {

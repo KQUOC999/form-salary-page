@@ -29,7 +29,7 @@ h2 {
   border-radius: 8px;
   border: 2px solid #ccc; /* Add border */
   box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  min-width: 280px; /* Ensure a minimum width to prevent collapsing */
+  min-width: 350px; /* Ensure a minimum width to prevent collapsing */
 }
 
 .scheduleTable {

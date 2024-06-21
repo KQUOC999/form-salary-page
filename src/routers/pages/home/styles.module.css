@@ -5,6 +5,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  min-width: 300px;
 }
 .container_form {
     display: flex;
@@ -64,6 +65,7 @@
     height: 100vh;
     box-sizing: border-box;
     max-width: 350px;
+    min-width: 280px;
     width: 95%;
   }
   
