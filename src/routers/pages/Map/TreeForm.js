@@ -2,6 +2,7 @@ import React, { useState} from 'react';
 import Form from "@rjsf/core";
 import validator from '@rjsf/validator-ajv8';
 import * as Realm from 'realm-web';
+import emitter from '../structureCompany.module/eventEmitter.module';
 
 import '../all_router_page.css/map.css';
 
@@ -11,11 +12,14 @@ const user = app.currentUser;
 const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
     const [formData, setFormData] = useState({});
 
+    function updateCompanyStructure() {
+        emitter.emit('updateCompanyStructure');
+    }
+
 //**             Hàm cập nhật dữ liệu jsonSchema cho server                 **//
     const handleUpdate = async ({ formData }) => {
         // Gọi hàm onSubmit để truyền giá trị form về TreeStructure
         onSubmit({ [formType]: formData });
-
         //Thực hiện đối với bảng companyName
         if (formType === 'companyName') {
             if (!formData) {
@@ -27,7 +31,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             try {
                 const functionName = "update_TreeForm_company";
                 const response = await user?.callFunction(functionName, enumValues, formType);
-
+                updateCompanyStructure();
                 return response;
             } catch (error) {
                 console.log(error.message);
@@ -46,7 +50,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             try {
                 const functionName = "update_TreeForm_company";
                 const response = await user?.callFunction(functionName, enumValues, formType, "", enumAreas);
-
+                updateCompanyStructure();    
                 return response;
             } catch (error) {
                 console.log(error.message);
@@ -67,7 +71,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             try {
                 const functionName = "update_TreeForm_company";
                 const response = await user?.callFunction(functionName, enumValues, formType, "", "", enumdataAreas, enumdataDepartment, );
-
+                updateCompanyStructure();
                 return response;
             } catch (error) {
                 console.log(error.message);
@@ -92,7 +96,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             const enumValues = formData.name
             try {
                 const response = await user?.callFunction(functionName, enumValues, formType)
-
+                updateCompanyStructure();
                 return response;               
             } catch (error) {
                 console.log(error.message)
@@ -112,7 +116,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             
             try {
                 const response = await user?.callFunction(functionName, enumValues, formType, listAreas, listDepartment)
-
+                updateCompanyStructure();
                 return response;               
             } catch (error) {
                 console.log(error.message)
@@ -136,7 +140,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             const enumValues = formData.name
             try {
                 const response = await user?.callFunction(functionName, enumValues, formType)
-
+                updateCompanyStructure();
                 return response;               
             } catch (error) {
                 console.log(error.message)
@@ -156,7 +160,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             
             try {
                 const response = await user?.callFunction(functionName, enumValues, formType, listAreas, listDepartment)
-
+                updateCompanyStructure();
                 return response;               
             } catch (error) {
                 console.log(error.message)
