@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import Form from "@rjsf/core";
 import validator from '@rjsf/validator-ajv8';
 import * as Realm from 'realm-web';
@@ -11,10 +11,12 @@ const user = app.currentUser;
 const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
     const [formData, setFormData] = useState({});
 
+//**             Hàm cập nhật dữ liệu jsonSchema cho server                 **//
     const handleUpdate = async ({ formData }) => {
         // Gọi hàm onSubmit để truyền giá trị form về TreeStructure
         onSubmit({ [formType]: formData });
 
+        //Thực hiện đối với bảng companyName
         if (formType === 'companyName') {
             if (!formData) {
                 console.log("Form data is invalid");
@@ -22,17 +24,17 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             }
             const enumValues = formData.name;
             
-            console.log("enumValues", enumValues)
             try {
                 const functionName = "update_TreeForm_company";
                 const response = await user?.callFunction(functionName, enumValues, formType);
-                console.log("response", response);
+
                 return response;
             } catch (error) {
                 console.log(error.message);
             }
         }
 
+        //Thực hiện đối với bảng companyAreas
         if (formType === 'companyAreas') {
             if (!formData) {
                 console.log("Form data is invalid");
@@ -41,17 +43,17 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             const enumValues = formData.list;
             const enumAreas  = formData.name
 
-            console.log("enumValues:", enumValues)
             try {
                 const functionName = "update_TreeForm_company";
                 const response = await user?.callFunction(functionName, enumValues, formType, "", enumAreas);
-                console.log("response", response);
+
                 return response;
             } catch (error) {
                 console.log(error.message);
             }
         }
 
+        //Thực hiện đối với bảng companyDepartment
         if (formType === 'companyDepartment') {
             if (!formData) {
                 console.log("Form data is invalid");
@@ -65,7 +67,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             try {
                 const functionName = "update_TreeForm_company";
                 const response = await user?.callFunction(functionName, enumValues, formType, "", "", enumdataAreas, enumdataDepartment, );
-                console.log("response", response);
+
                 return response;
             } catch (error) {
                 console.log(error.message);
@@ -74,12 +76,93 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
         
     };
 
-    const handleAdd = () => { 
-        // Thực hiện hành động thêm mới dữ liệu tương ứng với tab
+//**            Hàm insert (thêm) dữ liệu jsonSchema cho server             **//
+    const handleAdd = async () => { 
+        // Gọi hàm onSubmit để truyền giá trị form về TreeStructure
+        onSubmit({ [formType]: formData });       
+        const functionName = "insert_TreeForm_company"
+
+        //Thực hiện đối với from companyAreas
+        if (formType === "companyAreas"){
+            if (!formData) {
+                console.log("From data is invalid");
+                return
+            }
+            //Thêm các biến truyền vào
+            const enumValues = formData.name
+            try {
+                const response = await user?.callFunction(functionName, enumValues, formType)
+
+                return response;               
+            } catch (error) {
+                console.log(error.message)
+            }
+        };
+
+        //Thực hiện đối với from companyDepartment
+        if (formType === "companyDepartment"){
+            if (!formData) {
+                console.log("From data is invalid");
+                return
+            }
+            //Thêm các biến truyền vào
+            const enumValues = formData.name;
+            const listAreas  = formData.Danh_sách_khu_vực;
+            const listDepartment = formData.Danh_sách_phòng_ban
+            
+            try {
+                const response = await user?.callFunction(functionName, enumValues, formType, listAreas, listDepartment)
+
+                return response;               
+            } catch (error) {
+                console.log(error.message)
+            }
+        }
     };
 
-    const handleDelete = () => {
-        // Thực hiện hành động xóa dữ liệu tương ứng với tab
+//**            Hàm delete (xóa) dữ liệu jsonSchema cho server             **//
+    const handleDelete = async () => {
+        // Gọi hàm onSubmit để truyền giá trị form về TreeStructure
+        onSubmit({ [formType]: formData });
+        const functionName = "delete_TreeForm_company"
+
+        //Thực hiện đối với from companyAreas
+        if (formType === "companyAreas"){
+            if (!formData) {
+                console.log("From data is invalid");
+                return
+            }
+            //Thêm các biến truyền vào
+            const enumValues = formData.name
+            try {
+                const response = await user?.callFunction(functionName, enumValues, formType)
+
+                return response;               
+            } catch (error) {
+                console.log(error.message)
+            }
+        };
+
+        //Thực hiện đối với from companyDepartment
+        if (formType === "companyDepartment"){
+            if (!formData) {
+                console.log("From data is invalid");
+                return
+            }
+            //Thêm các biến truyền vào
+            const enumValues = formData.name;
+            const listAreas  = formData.Danh_sách_khu_vực;
+            const listDepartment = formData.Danh_sách_phòng_ban
+            
+            try {
+                const response = await user?.callFunction(functionName, enumValues, formType, listAreas, listDepartment)
+
+                return response;               
+            } catch (error) {
+                console.log(error.message)
+            }
+        }
+
     };
 
     const uiSchema = {

@@ -25,12 +25,13 @@ h2 {
 
 .mapCompany {
   width: 200px;
-  background-color: #e0e0e0;
+  background-color: #f9f9f9;
   padding: 10px;
   margin-left: 10px;
   border-radius: 8px;
-  border: 2px solid #ccc;
   flex-shrink: 0; /* Ngăn không cho phần này co lại khi không còn đủ không gian */
+  border: 1px solid #ddd;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2)
 }
 
 .scheduleList {

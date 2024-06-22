@@ -1,6 +1,6 @@
 .container {
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #ffffff;
   border-radius: 8px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
@@ -18,11 +18,13 @@ h2 {
 
 .containerLeft {
   flex-shrink: 0;
-  background-color: #e0e0e0;
+  background-color: #f9f9f9;
   width: 200px;
   margin-right: 10px;
   padding: 20px;
   border-radius: 8px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2)
 }
 
 .containerRight {
@@ -30,6 +32,7 @@ h2 {
   background-color: #e0e0e0;
   padding: 20px;
   border-radius: 8px;
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.4)
 }
 
 .flexContainer {
