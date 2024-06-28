@@ -11,6 +11,7 @@ const user = app.currentUser;
 
 const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
     const [formData, setFormData] = useState({});
+    const [isSuccess, setIsSuccess] = useState(true);
 
     function updateCompanyStructure() {
         emitter.emit('updateCompanyStructure');
@@ -32,8 +33,10 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
                 const functionName = "update_TreeForm_company";
                 const response = await user?.callFunction(functionName, enumValues, formType);
                 updateCompanyStructure();
+                setIsSuccess(true)
                 return response;
             } catch (error) {
+                setIsSuccess(false)
                 console.log(error.message);
             }
         }
@@ -50,9 +53,12 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
             try {
                 const functionName = "update_TreeForm_company";
                 const response = await user?.callFunction(functionName, enumValues, formType, "", enumAreas);
-                updateCompanyStructure();    
+                updateCompanyStructure();
+                setIsSuccess(true);
+                checkUpdateDataEmployee(formType, enumValues, enumAreas);    
                 return response;
             } catch (error) {
+                setIsSuccess(false)
                 console.log(error.message);
             }
         }
@@ -72,14 +78,37 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
                 const functionName = "update_TreeForm_company";
                 const response = await user?.callFunction(functionName, enumValues, formType, "", "", enumdataAreas, enumdataDepartment, );
                 updateCompanyStructure();
+                setIsSuccess(true);
+                console.log("formType, enumValues, enumdataDepartment:", formType, enumValues, enumdataDepartment)
+                checkUpdateDataEmployee(formType, enumValues, "", enumdataDepartment, enumdataAreas); 
                 return response;
             } catch (error) {
+                setIsSuccess(false)
                 console.log(error.message);
             }
         }
         
     };
 
+    //Cập nhật lại dữ liệu nhận cho Server khi trạng thái phản hồi thành công ở hàm update
+        const checkUpdateDataEmployee = async (formType, enumValues, enumAreas, enumdataDepartment, enumdataAreas) => {
+            try {
+                if (isSuccess) { 
+                    let functionName = "checkUpdate_dataRecivedEmployee"
+                    if (formType === 'companyAreas') { 
+                        const response = await user?.callFunction(functionName, formType, enumValues, enumAreas);
+                        return response
+                    };
+
+                    if (formType === 'companyDepartment') { 
+                        const response = await user?.callFunction(functionName, formType, enumValues, enumdataDepartment, enumdataAreas);
+                        return response
+                    }
+                }
+            } catch (error) {
+                window.alert(error.error)
+            }
+        }
 //**            Hàm insert (thêm) dữ liệu jsonSchema cho server             **//
     const handleAdd = async () => { 
         // Gọi hàm onSubmit để truyền giá trị form về TreeStructure
@@ -128,8 +157,8 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
     const handleDelete = async () => {
         // Gọi hàm onSubmit để truyền giá trị form về TreeStructure
         onSubmit({ [formType]: formData });
-        const functionName = "delete_TreeForm_company"
-
+        const functionName = "delete_TreeForm_company";
+       
         //Thực hiện đối với from companyAreas
         if (formType === "companyAreas"){
             if (!formData) {

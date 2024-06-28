@@ -1,20 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Form from "@rjsf/core";
 import * as Realm from 'realm-web';
 import validator from '@rjsf/validator-ajv8';
 import styles from './styles.module.css'; // Import CSS Module
 import uiSchema from '../schedules/uiSchema';
-import CompanyStructure from '../structureCompany.module/companyStructure'
-
+import CompanyStructure from '../structureCompany.module/companyStructure';
+import { useAppContext } from '../structureCompany.module/appContext.module';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
 const ManagerEmployee = () => {
   const [jsonSchema, setJsonSchema] = useState(null);
-  const [formData, setFormData] = useState([]);
+  const [formData, setFormData] = useState([]); // Initialize formData as an array
   const [currentData, setCurrentData] = useState({});
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const { selectedNode, dataByType, dataTreeCompany, parentNode, childNodes } = useAppContext();
+  const [data, setDataTreeCompany] = useState([])
+  const [departmentValue, setDepartmentValue] = useState({});
+  const [serverData, setServerData] = useState([]);
 
+  const formRef = useRef(null); // Ref cho form
+
+  useEffect( () => {
+    console.log('parentNode:', parentNode)
+    console.log('childNodes:', childNodes)
+  }, [parentNode, childNodes])
+  
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -27,7 +40,6 @@ const ManagerEmployee = () => {
         const jsonSchema = response[0]?.public?.input?.jsonSchema;
 
         setJsonSchema(jsonSchema);
-        console.log("response:", response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -36,41 +48,185 @@ const ManagerEmployee = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    // Cập nhật currentData khi selectedNode thay đổi
+    if (selectedNode) {
+      for (let i = 0; i < departmentValue.length; i++) {
+        if (selectedNode.lable === departmentValue[i]) {
+          setCurrentData(prevData => ({
+            ...prevData,
+            department: selectedNode.lable
+          }));
+          console.log('nodeid:', selectedNode)
+          return;
+        } else {
+          setCurrentData(prevData => ({
+            ...prevData,
+            department: ''
+          }));
+        } 
+      }
+    } else {
+      setCurrentData(prevData => ({
+        ...prevData,
+        department: ''
+      }));
+    }
+
+    if (dataTreeCompany !== null){
+      setDataTreeCompany(dataTreeCompany)
+      console.log('data:', data);
+    }
+
+  }, [selectedNode, dataByType, departmentValue, dataTreeCompany, data]);
+
+  
+
   const handleFormChange = ({ formData }) => {
     setCurrentData(formData);
   };
 
   const handleSelect = (index) => {
-    setSelectedIndex(index);
-    setCurrentData(formData[index]);
-  };
-
-
-  const handleAdd = () => {
-    setFormData([...formData, currentData]);
-    setCurrentData({});
-  };
-
-  const handleSave = () => {
-    if (selectedIndex !== null) {
-      const newData = [...formData];
-      newData[selectedIndex] = currentData;
-      setFormData(newData);
+    if (selectedIndex === index) {
+      // Nếu bấm vào cùng một ô hai lần, bỏ chọn ô đó
+      setSelectedIndex(null);
+      setCurrentData({});
     } else {
-      setFormData([...formData, currentData]);
+      // Nếu bấm vào ô khác, chọn ô đó
+      setSelectedIndex(index);
+      setCurrentData(serverData[index]);
+      
     }
-    setCurrentData({});
-    setSelectedIndex(null);
   };
+
+const handleAdd = () => {
+  const newFormData = [...serverData, {}]; // Thêm một đối tượng trống vào cuối mảng serverData
+  setServerData(newFormData); // Cập nhật serverData
+  setCurrentData({}); // Đặt currentData thành đối tượng trống
+  console.log("newData", newFormData); // Log dữ liệu mới
+
+  if (formRef.current) {
+    formRef.current.reset(); // Reset form nếu cần thiết
+  }
+};
+
+/*
+  const handleAdd = () => {
+    let newData;
+    if (selectedIndex !== null && serverData[selectedIndex]) {
+      // Nếu có dòng được chọn và dữ liệu hợp lệ
+      newData = [...serverData]; // Sao chép mảng serverData
+      newData.splice(selectedIndex + 1, 0, { ...serverData[selectedIndex] }); // Thêm bản sao của dữ liệu vào vị trí tiếp theo
+    } else {
+      // Nếu không có dòng nào được chọn, chỉ thêm một đối tượng trống vào cuối mảng
+      newData = [...serverData, {}];
+    }
+    
+    setServerData(newData); // Cập nhật serverData mới
+    setCurrentData({}); // Đặt currentData thành đối tượng trống
+    setSelectedIndex(selectedIndex !== null ? selectedIndex + 1 : newData.length - 1); // Chọn hàng mới thêm
+
+    if (formRef.current) {
+      formRef.current.reset(); // Reset form nếu cần thiết
+    }
+  };
+
+*/
+
+  const handleSave = async () => {
+    // Kiểm tra nếu trường department đã có giá trị thì mới lưu
+    if (currentData.department) {
+      if (selectedIndex !== null) {
+        const newData = [...formData];
+        newData[selectedIndex] = currentData;
+        setFormData(newData);
+      } else {
+        setFormData(prevData => [...prevData, currentData, {}]);
+      }
+      setCurrentData({});
+      setSelectedIndex(null);
+
+      encodeData();
+      await saveDataToServer();
+      toast.success('Lưu thông tin thành công!');
+    } else {
+      toast.error('Vui lòng điền thông tin phòng ban!');
+    }
+  };
+
+  const saveDataToServer = async () => {
+    const functionName = "dataRecied_employee";
+    const dataToServer = {
+      currentData,
+      parentNode
+    }
+    let employeeId = dataToServer?.currentData?.employeeId;
+    try {
+      const response = await app.currentUser.callFunction(functionName, dataToServer, employeeId);
+      return response
+
+    } catch (error) {
+      toast.error('Gửi thông tin về server thất bại!');
+    }
+  };
+
+  const encodeData = useCallback(() => {
+    const departmentNames = dataByType?.companyDepartment?.[0]?.data_departmentName 
+      ? Object.keys(dataByType.companyDepartment[0].data_departmentName).reduce((acc, key) => {
+        const enumValues = dataByType.companyDepartment[0].data_departmentName[key]?.enum;
+        if (enumValues) {
+            acc.push(...enumValues);
+        }
+          return acc;
+        }, [])
+      : [];
+
+      setDepartmentValue(departmentNames);
+  
+  }, [dataByType]);
+
+  useEffect(() => {
+    encodeData();
+  }, [encodeData]);
+
+  const callDataBySelectedLable = useCallback (async() => {
+    const functionName = "callDataForm_bySelectedLable"
+    let selectedLableDepartment = selectedNode.lable
+    let parentNodes = parentNode?.parentNode.label
+
+    try {
+        const response = await app.currentUser.callFunction(functionName, selectedLableDepartment, parentNodes);
+        toast.success('Gọi dữ liệu từ Server lên thành công!');
+        // Cập nhật serverData dựa vào kiểu dữ liệu của response
+        if (Array.isArray(response)) {
+          setServerData(prevData => [...prevData, ...response]); // Nối mảng response vào serverData
+        } else {
+          setServerData(prevData => [...prevData, response]); // Thêm đối tượng response vào serverData
+        }
+        setCurrentData(response[0] || {}); // Giả sử bạn muốn hiển thị dữ liệu của phần tử đầu tiên trong form
+
+        return response
+
+    } catch (error) {
+      toast.error(error.error)
+    }
+  }, [selectedNode, parentNode])
+
+  useEffect( () => {
+    if (selectedNode) {
+      callDataBySelectedLable(selectedNode);
+    }
+  }, [callDataBySelectedLable, selectedNode])
 
   const handleDelete = () => {
     if (selectedIndex !== null) {
-      const newData = formData.filter((_, i) => i !== selectedIndex);
-      setFormData(newData);
-      setCurrentData({});
-      setSelectedIndex(null);
+      const newData = serverData.filter((_, i) => i !== selectedIndex); // Lọc bỏ dòng được chọn
+      setServerData(newData);
+      setCurrentData({}); 
+      setSelectedIndex(null); 
     }
   };
+
 
   const handleChangeEmployee = (index) => {
     //function
@@ -84,6 +240,11 @@ const ManagerEmployee = () => {
     //function
   };
 
+  const handleExternalSubmit = () => {
+    if (formRef.current) {
+      formRef.current.submit();
+    }
+  };
 
   if (!jsonSchema) {
     return <div className={styles.container}>Loading...</div>;
@@ -96,34 +257,35 @@ const ManagerEmployee = () => {
       </div>
       <div className={styles.containerRight}>
         <div className={styles.flexContainer}>
-        <div className={styles.buttonGroup}>
+          <div className={styles.buttonGroup}>
             <button className={styles.button} onClick={handleAdd}>Thêm mới</button>
-            <button className={styles.button} onClick={handleSave}>Lưu</button>
+            <button className={styles.button} onClick={handleExternalSubmit}>Lưu</button>
+            <ToastContainer />
             <button className={styles.button} onClick={handleDelete}>Xóa</button>
             <button className={styles.button} onClick={handleChangeEmployee}>Chuyển nhân viên</button>
             <button className={styles.button} onClick={handleImportExcel}>Nhập từ Excel</button>
             <button className={styles.button} onClick={handleExportUSB}>Xuất USB</button>
-        </div>
-            <div className={styles.scheduleList}>
+          </div>
+          <div className={styles.scheduleList}>
             <table className={styles.scheduleTable}>
-                <thead>
+              <thead>
                 <tr>
-                    <th>Mã NV</th>
-                    <th>Tên nhân viên</th>
-                    <th>Mã CC</th>
-                    <th>Tên CC</th>
-                    <th>Ngày vào làm</th>
-                    <th>Mã thẻ</th>
-                    <th>Ngày sinh</th>
+                  <th>Mã NV</th>
+                  <th>Tên nhân viên</th>
+                  <th>Mã CC</th>
+                  <th>Tên CC</th>
+                  <th>Ngày vào làm</th>
+                  <th>Mã thẻ</th>
+                  <th>Ngày sinh</th>
                 </tr>
-                </thead>
-                <tbody>
-                {formData.map((employee, index) => (
-                    <tr
+              </thead>
+              <tbody>
+                {Array.isArray(serverData) && serverData.map((employee, index) => (
+                  <tr
                     key={index}
                     className={selectedIndex === index ? styles.selected : ''}
                     onClick={() => handleSelect(index)}
-                    >
+                  >
                     <td>{employee.employeeId}</td>
                     <td>{employee.employeeName}</td>
                     <td>{employee.timekeepingId}</td>
@@ -131,23 +293,25 @@ const ManagerEmployee = () => {
                     <td>{employee.joinDate}</td>
                     <td>{employee.cardId}</td>
                     <td>{employee.birthDate}</td>
-                    </tr>
+                  </tr>
                 ))}
-                </tbody>
+              </tbody>
             </table>
-            </div>
-            <div className={styles.formSection}>
+          </div>
+          <div className={styles.formSection}>
             <Form
-                schema={jsonSchema}
-                uiSchema={uiSchema}
-                formData={currentData}
-                onChange={handleFormChange}
-                validator={validator}
+              ref={formRef}
+              schema={jsonSchema}
+              uiSchema={uiSchema}
+              formData={currentData}
+              onChange={handleFormChange}
+              validator={validator}
+              onSubmit={handleSave}
             />
-            </div>
-            </div>
+          </div>
         </div>
       </div>
+    </div>
   );
 };
 
