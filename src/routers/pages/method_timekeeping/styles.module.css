@@ -1,11 +1,19 @@
 .container {
-  padding: 20px;
+  padding: 10px;
   background-color: #f9f9f9;
   border-radius: 8px;
   width: 70%;
   margin: 0 auto;
   overflow-x: auto;
   font-family: Arial, sans-serif;
+}
+
+@media (max-width: 800px) {
+  .container {
+    width: 100%; /* Set width to 100% when viewport width is 500px or less */
+    max-width: none; /* Remove max-width limit */
+    padding: none;
+  }
 }
 
 h2 {
