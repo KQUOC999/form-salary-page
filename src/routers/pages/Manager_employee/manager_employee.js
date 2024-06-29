@@ -8,6 +8,7 @@ import CompanyStructure from '../structureCompany.module/companyStructure';
 import { useAppContext } from '../structureCompany.module/appContext.module';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import * as XLSX from 'xlsx';
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -20,6 +21,7 @@ const ManagerEmployee = () => {
   const [data, setDataTreeCompany] = useState([])
   const [departmentValue, setDepartmentValue] = useState({});
   const [serverData, setServerData] = useState([]);
+  const [employee, setEmployees] = useState([]);
 
   const formRef = useRef(null); // Ref cho form
 
@@ -231,11 +233,43 @@ const handleAdd = () => {
   const handleChangeEmployee = (index) => {
     //function
   };
+// hàm tìm kiếm thư mục tải lên
+  const handleImportExcel = () => {
+    document.getElementById('fileInput').click();
+  };
+// hàm tải file lên  
+  const handleFileUpload = (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      return; // If no file is selected, do nothing
+    }
+  
+    const reader = new FileReader();
+  
+    reader.onload = (e) => {
+      const data = new Uint8Array(e.target.result);
+      const workbook = XLSX.read(data, { type: 'array' });
+      const sheetName = workbook.SheetNames[0];
+      const worksheet = workbook.Sheets[sheetName];
+      const json = XLSX.utils.sheet_to_json(worksheet);
+  
+      setEmployees(json);
+     // setServerData(employee)
+      console.log('employees:', json);
 
-  const handleImportExcel = (index) => {
-    //function
+      if (Array.isArray(json)) {
+        setServerData(prevData => [...prevData, ...json]); // Nối mảng response vào serverData
+      } else {
+        setServerData(prevData => [...prevData, json]); // Thêm đối tượng response vào serverData
+      }
+      setCurrentData(json[0] || {});
+      console.log('employees:', employee);
+    };
+  
+    reader.readAsArrayBuffer(file);
   };
 
+  
   const handleExportUSB = (index) => {
     //function
   };
@@ -264,6 +298,13 @@ const handleAdd = () => {
             <button className={styles.button} onClick={handleDelete}>Xóa</button>
             <button className={styles.button} onClick={handleChangeEmployee}>Chuyển nhân viên</button>
             <button className={styles.button} onClick={handleImportExcel}>Nhập từ Excel</button>
+            <input
+              id="fileInput"
+              type="file"
+              accept=".xlsx, .xls"
+              style={{ display: 'none' }}
+              onChange={handleFileUpload}
+            />
             <button className={styles.button} onClick={handleExportUSB}>Xuất USB</button>
           </div>
           <div className={styles.scheduleList}>
@@ -286,13 +327,13 @@ const handleAdd = () => {
                     className={selectedIndex === index ? styles.selected : ''}
                     onClick={() => handleSelect(index)}
                   >
-                    <td>{employee.employeeId}</td>
-                    <td>{employee.employeeName}</td>
-                    <td>{employee.timekeepingId}</td>
-                    <td>{employee.timekeepingName}</td>
-                    <td>{employee.joinDate}</td>
-                    <td>{employee.cardId}</td>
-                    <td>{employee.birthDate}</td>
+                    <td>{employee.employeeId || employee['Mã NV']}</td>
+                    <td>{employee.employeeName || employee['Tên nhân viên']}</td>
+                    <td>{employee.timekeepingId || employee['Mã CC']}</td>
+                    <td>{employee.timekeepingName || employee['Tên CC']}</td>
+                    <td>{employee.joinDate|| employee['Ngày vào làm']}</td>
+                    <td>{employee.cardId|| employee['Mã thẻ']}</td>
+                    <td>{employee.birthDate|| employee['Ngày sinh']}</td>
                   </tr>
                 ))}
               </tbody>

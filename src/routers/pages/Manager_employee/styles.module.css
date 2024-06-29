@@ -10,6 +10,13 @@
   display: flex;
   flex-direction: row; /* Stack elements horizontally */
 }
+@media (max-width: 800px) {
+  .container {
+    width: 100%; /* Set width to 100% when viewport width is 500px or less */
+    max-width: none; /* Remove max-width limit */
+    padding: 10px;
+  }
+}
 
 h2 {
   text-align: center;
