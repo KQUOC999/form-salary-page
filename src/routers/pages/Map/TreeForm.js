@@ -55,6 +55,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
                 const response = await user?.callFunction(functionName, enumValues, formType, "", enumAreas);
                 updateCompanyStructure();
                 setIsSuccess(true);
+
                 checkUpdateDataEmployee(formType, enumValues, enumAreas);    
                 return response;
             } catch (error) {
@@ -79,7 +80,7 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
                 const response = await user?.callFunction(functionName, enumValues, formType, "", "", enumdataAreas, enumdataDepartment, );
                 updateCompanyStructure();
                 setIsSuccess(true);
-                console.log("formType, enumValues, enumdataDepartment:", formType, enumValues, enumdataDepartment)
+        
                 checkUpdateDataEmployee(formType, enumValues, "", enumdataDepartment, enumdataAreas); 
                 return response;
             } catch (error) {
@@ -93,15 +94,17 @@ const TreeForm = ({ jsonSchema, onSubmit, formType }) => {
     //Cập nhật lại dữ liệu nhận cho Server khi trạng thái phản hồi thành công ở hàm update
         const checkUpdateDataEmployee = async (formType, enumValues, enumAreas, enumdataDepartment, enumdataAreas) => {
             try {
-                if (isSuccess) { 
-                    let functionName = "checkUpdate_dataRecivedEmployee"
+                if (isSuccess) {                    
+                    let functionNameAreas = "checkUpdateAreas_dataRecivedEmployee";
+                    let functionNameDepartment = "checkUpdateDepartment_dataRecivedEmployee"
+
                     if (formType === 'companyAreas') { 
-                        const response = await user?.callFunction(functionName, formType, enumValues, enumAreas);
+                        const response = await user?.callFunction(functionNameAreas, formType, enumValues, enumAreas);
                         return response
                     };
 
                     if (formType === 'companyDepartment') { 
-                        const response = await user?.callFunction(functionName, formType, enumValues, enumdataDepartment, enumdataAreas);
+                        const response = await user?.callFunction(functionNameDepartment, formType, enumValues, enumdataDepartment, enumdataAreas);
                         return response
                     }
                 }

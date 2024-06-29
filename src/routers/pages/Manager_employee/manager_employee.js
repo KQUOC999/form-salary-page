@@ -192,10 +192,13 @@ const handleAdd = () => {
   }, [encodeData]);
 
   const callDataBySelectedLable = useCallback (async() => {
-    const functionName = "callDataForm_bySelectedLable"
-    let selectedLableDepartment = selectedNode.lable
-    let parentNodes = parentNode?.parentNode.label
+    const functionName = "callDataForm_bySelectedLable";
+    let selectedLableDepartment = selectedNode.lable;
+    let parentNodes = parentNode?.parentNode?.label
 
+    if (!parentNodes){
+      return // Nếu parentNodes là null hoặc undefined, không thực hiện gọi API và kết thúc hàm
+    }
     try {
         const response = await app.currentUser.callFunction(functionName, selectedLableDepartment, parentNodes);
         toast.success('Gọi dữ liệu từ Server lên thành công!');
@@ -210,7 +213,7 @@ const handleAdd = () => {
         return response
 
     } catch (error) {
-      toast.error(error.error)
+      return error.error
     }
   }, [selectedNode, parentNode])
 
