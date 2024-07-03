@@ -1,4 +1,5 @@
 const uiSchema = {
+  
   shiftCode: {
     "ui:widget": "select"
   },

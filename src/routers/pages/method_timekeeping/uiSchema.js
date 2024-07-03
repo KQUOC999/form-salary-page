@@ -8,6 +8,8 @@ const uiSchema = {
     "methodSelection",
     "note",
     "timeSelection",
+    "singleCheckIn",
+    "singleCheckBox",
     "timeSettings",
     "minTime",
     "maxTime",
@@ -22,6 +24,14 @@ const uiSchema = {
       inline: true
     },
     "ui:classNames": styles.radioGroup
+  },
+  singleCheckBox: {
+    "ui:widget": "checkbox",
+    "ui:title": false
+  },
+  singleCheckIn: {
+    "ui:widget": "checkbox",
+    "ui:title": false
   },
   timeSelection: {
     "ui:widget": "radio",

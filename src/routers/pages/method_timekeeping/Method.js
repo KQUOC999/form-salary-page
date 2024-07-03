@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import * as Realm from 'realm-web';
 import Form from "@rjsf/core";
 import validator from '@rjsf/validator-ajv8';
@@ -10,6 +10,7 @@ const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 const TableWithFormsAndCheckboxes = () => {
   const [jsonSchema, setJsonSchema] = useState(null);
   const [formData, setFormData] = useState({});
+  const formRef = useRef(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,7 +40,25 @@ const TableWithFormsAndCheckboxes = () => {
   };
 
   const handleFormChange = (event) => {
-    setFormData(event.formData);
+    const newFormData = event.formData;
+
+    // Update note based on methodSelection from jsonSchema
+    const methodSelection = newFormData.methodSelection; // Giả sử newFormData là dữ liệu mới từ form
+    const schemaItem = jsonSchema?.dependencies?.methodSelection?.oneOf.find(item =>
+      item.properties.methodSelection.enum.includes(methodSelection)
+    )?.properties?.note?.default;
+    if (!schemaItem){
+      setFormData({
+        ...newFormData,
+        note: ""
+      });
+    }
+    else {
+    setFormData({
+      ...newFormData,
+      note: schemaItem || ""
+    });
+  }
   };
 
   const handleAdd = () => {
@@ -54,6 +73,12 @@ const TableWithFormsAndCheckboxes = () => {
     // Thực hiện hành động tương ứng với tab
   };
 
+  const handleExternalSubmit = () => {
+    if (formRef.current) {
+      formRef.current.submit();
+    }
+  }
+
   if (!jsonSchema) {
     return <div className={styles.container}>Loading...</div>;
   }
@@ -63,6 +88,7 @@ const TableWithFormsAndCheckboxes = () => {
       <h2>Cách chấm công</h2>
       <div className={styles.formSection}>
         <Form
+          ref={formRef}
           schema={jsonSchema}
           formData={formData}
           onChange={handleFormChange}
@@ -71,12 +97,14 @@ const TableWithFormsAndCheckboxes = () => {
           onSubmit={saveDataAsJson}
         />
       </div>
-      <div className={styles.buttonGroup}>
-        <button className={styles.addButton} onClick={handleAdd}>Thêm mới</button>
-        <button className={styles.saveButton} onClick={saveDataAsJson}>Lưu</button>
-        <button className={styles.deleteButton} onClick={handleDelete}>Xóa</button>
-        <button className={styles.exitButton} onClick={handleExit}>Thoát</button>
-      </div>
+      <div className={styles.container_buttonGroup}>
+        <div className={styles.buttonGroup}>
+          <button className={styles.addButton} onClick={handleAdd}>Thêm mới</button>
+          <button className={styles.saveButton} onClick={handleExternalSubmit}>Lưu</button>
+          <button className={styles.deleteButton} onClick={handleDelete}>Xóa</button>
+          <button className={styles.exitButton} onClick={handleExit}>Thoát</button>
+        </div>
+      </div>   
     </div>
   );
 };

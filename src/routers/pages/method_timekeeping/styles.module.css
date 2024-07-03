@@ -1,5 +1,5 @@
 .container {
-  padding: 10px;
+  padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   width: 70%;
@@ -10,9 +10,9 @@
 
 @media (max-width: 800px) {
   .container {
-    width: 100%; /* Set width to 100% when viewport width is 500px or less */
+    width: 95%; /* Set width to 100% when viewport width is 800px or less */
     max-width: none; /* Remove max-width limit */
-    padding: none;
+    padding: 10px; /* Add padding */
   }
 }
 
@@ -27,18 +27,27 @@ h2 {
   border: 1px solid #ddd;
   border-radius: 8px;
   width: 95%;
-  margin: 0 10px;
+  margin: 20px auto; /* Centering the form section */
+  min-width: 350px;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+}
+
+.container_buttonGroup {
+  padding: 20px;
+  border-radius: 8px;
+  width: 95%;
+  margin: 20px auto; /* Centering the button group */
   min-width: 350px;
 }
 
 .buttonGroup {
   display: flex;
   justify-content: space-between;
-  margin-top: 20px;
 }
 
 .addButton,
 .saveButton,
+.exitButton,
 .deleteButton {
   padding: 10px 20px;
   border: none;
@@ -46,7 +55,7 @@ h2 {
   background-color: #007bff;
   color: white;
   cursor: pointer;
-  flex: 1;
+  flex-grow: 1;
   margin: 0 10px;
   text-align: center;
   transition: background-color 0.3s, transform 0.2s;
@@ -54,6 +63,7 @@ h2 {
 
 .addButton:hover,
 .saveButton:hover,
+.exitButton:hover,
 .deleteButton:hover {
   background-color: #0056b3;
   transform: scale(1.05);
@@ -90,6 +100,7 @@ h2 {
 
 .note {
   background-color: #e9ecef;
+  color: #007bff;
   padding: 10px;
   border-left: 4px solid #007bff;
   margin-top: 10px;
