@@ -5,13 +5,14 @@
   width: 70%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
-  overflow-x: auto; /* Enable horizontal scrolling */
-  position: relative; /* Ensure relative positioning for absolute elements */
+  overflow-x: auto; 
+  position: relative;
 }
+
 @media (max-width: 800px) {
   .container {
-    width: 95%; /* Set width to 100% when viewport width is 500px or less */
-    max-width: none; /* Remove max-width limit */
+    width: 95%;
+    max-width: none;
     padding: 10px;
   }
 }
@@ -21,60 +22,41 @@ h2 {
   margin-bottom: 20px;
 }
 
-.flexContainer {
+.containerTableFormButton {
   display: flex;
-  flex-shrink: 0; /* Allow wrapping for smaller screens */
-  gap: 20px; /* Add gap between flex items */
-  justify-content: space-between; /* Distribute space between items */
+  gap: 10px;
+  padding: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
+  overflow-x: auto; 
 }
 
-.scheduleList,
-.formSection {
-  flex: 1; /* Allow both sections to grow and shrink equally */
+.containerFormButtonFlex {
+  flex: 1;
+}
+
+.containerFormButton {
+  display: block;
+}
+
+.scheduleListTableTop {
   background-color: #e0e0e0;
   padding: 10px;
   border-radius: 8px;
-  border: 2px solid #ccc; /* Add border */
-  box-sizing: border-box; /* Include padding and border in the element's total width and height */
-  min-width: 350px; /* Ensure a minimum width to prevent collapsing */
-}
-
-.scheduleTable {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #e0e0e0;
-}
-
-.scheduleTable th,
-.scheduleTable td {
-  border: 1px solid #1f1e1e;
-  padding: 8px;
-  text-align: left;
-}
-
-.scheduleTable th {
-  background-color: #f2f2f2;
-  border-bottom: 1.5px solid #121010;
-}
-
-.scheduleTable .selected {
-  background-color: #007bff;
-  color: white;
-}
-
-.scheduleTable .selected td:first-child {
-  text-align: center;
+  border: 2px solid #ccc;
+  box-sizing: border-box;
+  width: 30%;
+  min-width: 300px;
 }
 
 .formSection {
-  flex: 1;
-  padding: 20px;
-  background-color: #fff;
+  padding: 10px;
   border-radius: 8px;
   border: 2px solid #ccc;
+  box-sizing: border-box;
   width: 100%;
+  min-width: 350px;
 }
-
 
 .buttonGroup {
   display: flex;
@@ -90,8 +72,78 @@ h2 {
   background-color: #007bff;
   color: white;
   cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth hover transition */
 }
 
 .buttonGroup button:hover {
   background-color: #0056b3;
+}
+
+.scheduleTableTop {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #e0e0e0;
+}
+
+.scheduleTableTop th,
+.scheduleTableTop td {
+  border: 1px solid #1f1e1e;
+  padding: 8px;
+  text-align: left;
+}
+
+.scheduleTableTop th {
+  background-color: #f2f2f2;
+  border-bottom: 1.5px solid #121010;
+}
+
+.scheduleTableTop .selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.scheduleTableTop .selected td:first-child {
+  text-align: center;
+}
+/*Table below setup styles */
+.containerTableBelow{
+  margin-top: 20px;
+  border-radius: 8px;
+  height: 350px;
+  min-width: 350px;
+  background-color: white;
+  overflow-y: auto;
+}
+
+.containerChildres{
+  min-width: 800px;
+  overflow-x: auto; 
+  padding: 10px;
+}
+
+.scheduleListTableBelow {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #e0e0e0;
+}
+
+.scheduleListTableBelow th,
+.scheduleListTableBelow td {
+  border: 1px solid #1f1e1e;
+  padding: 8px;
+  text-align: left;
+}
+
+.scheduleListTableBelow th {
+  background-color: #f2f2f2;
+  border-bottom: 1.5px solid #121010;
+}
+
+.scheduleListTableBelow .selected {
+  background-color: #007bff;
+  color: white;
+}
+
+.scheduleListTableBelow .selected td:first-child {
+  text-align: center;
 }

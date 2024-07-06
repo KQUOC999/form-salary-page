@@ -3,8 +3,7 @@ import Form from "@rjsf/core";
 import * as Realm from 'realm-web';
 import validator from '@rjsf/validator-ajv8';
 import styles from './styles.module.css'; // Import CSS Module
-import uiSchema from '../schedules/uiSchema';
-
+import uiSchema from './uiSchema'
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
 const MachineInformation = () => {
@@ -17,9 +16,7 @@ const MachineInformation = () => {
     const fetchData = async () => {
       try {
         const user = app.currentUser;
-        if (!user) {
-          await app.logIn(Realm.Credentials.anonymous());
-        }
+        
         const functionName = "machine_informationJsonSchema";
         const response = await user.functions[functionName]();
         const jsonSchema = response[0]?.public?.input?.jsonSchema;

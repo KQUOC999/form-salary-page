@@ -49,6 +49,9 @@ const uiSchema = {
       rows: 3
     },
     "ui:classNames": styles.note
+  },
+  "ui:submitButtonOptions": {
+    "norender": true
   }
 };
 

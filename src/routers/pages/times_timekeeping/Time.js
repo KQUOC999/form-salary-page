@@ -23,9 +23,7 @@ const TimeClock = () => {
     const fetchData = async () => {
       try {
         const user = app.currentUser;
-        if (!user) {
-          await app.logIn(Realm.Credentials.anonymous());
-        }
+        
         const functionName = "time_timekeeping_jsonSchema";
         const response = await user.functions[functionName]();
         const schema = response[0]?.public?.input?.jsonSchema;

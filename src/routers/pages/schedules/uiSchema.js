@@ -1,18 +1,20 @@
 const uiSchema = {
-    "scheduleList": {
-      "ui:widget": "select"
-    },
-    "selectedSchedule": {
-      "ui:widget": "select"
-    },
-    "description": {
+  "ui:order": ["scheduleList", "description"],
+  scheduleList: {
+    "ui:widget": "text"
+  },
+  description: {
+    "ui:order": ["repeatCycle"],
+    repeatCycle: {
+      "ui:widget": "radio",
       "ui:options": {
-        "rows": 3
+        inline: true
       }
-    },
-    "repeatCycle": {
-      "ui:widget": "radio"
     }
+  },
+  "ui:submitButtonOptions": {
+    norender: true
   }
+};
 
-  export default uiSchema;
+export default uiSchema;

@@ -11,8 +11,7 @@
 @media (max-width: 800px) {
   .container {
     width: 95%; /* Set width to 100% when viewport width is 800px or less */
-    max-width: none; /* Remove max-width limit */
-    padding: 10px; /* Add padding */
+    padding: 10px; /* Adjust padding for smaller screens */
   }
 }
 
@@ -21,13 +20,21 @@ h2 {
   margin-bottom: 20px;
 }
 
+.containerFormTable {
+  display: flex;
+  gap: 20px;
+}
+
+.containerFormButton {
+  flex: 1;
+  width: 90%;
+}
+
 .formSection {
   padding: 20px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  width: 95%;
-  margin: 20px auto; /* Centering the form section */
   min-width: 350px;
   box-shadow: 0px 5px 20px rgba(0, 0, 0, 0.2);
 }
@@ -35,14 +42,12 @@ h2 {
 .container_buttonGroup {
   padding: 20px;
   border-radius: 8px;
-  width: 95%;
-  margin: 20px auto; /* Centering the button group */
   min-width: 350px;
 }
 
 .buttonGroup {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
 }
 
 .addButton,
@@ -106,47 +111,36 @@ h2 {
   margin-top: 10px;
 }
 
-.scheduleTable {
+.tablecontainer {
+  border-radius: 8px;
+  width: calc(100% - 20px - 80%); /* Adjust width to fit the remaining space minus gap */
+  min-width: 200px; /* Limit maximum width */
+  box-sizing: border-box;
+  overflow-x: auto;
+}
+
+.table {
   width: 100%;
   border-collapse: collapse;
+  margin-top: 20px;
 }
 
-.scheduleTable th,
-.scheduleTable td {
+.table th,
+.table td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: center;
-  white-space: nowrap;
+  text-align: left;
 }
 
-.scheduleTable th {
+.table th {
   background-color: #f2f2f2;
-  cursor: pointer;
-  position: relative;
-  user-select: none;
+  font-weight: bold;
 }
 
-.scheduleTable th .resizer {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 5px;
-  height: 100%;
-  cursor: col-resize;
-  background-color: transparent;
-  z-index: 1;
-  transition: background-color 0.3s;
+.table tr:nth-child(even) {
+  background-color: #f9f9f9;
 }
 
-.scheduleTable th .resizer:hover {
-  background-color: #007bff;
-}
-
-.scheduleTable th.resizing {
-  background-color: #f1f1f1;
-}
-
-.scheduleTable th,
-.scheduleTable td {
-  transition: width 0.2s ease;
+.table tr:hover {
+  background-color: #ddd;
 }

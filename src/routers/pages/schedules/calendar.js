@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import * as Realm from 'realm-web';
 import Form from "@rjsf/core";
 import validator from '@rjsf/validator-ajv8';
@@ -12,14 +12,14 @@ const Schedule = () => {
   const [formData, setFormData] = useState([]);
   const [currentData, setCurrentData] = useState({});
   const [selectedIndex, setSelectedIndex] = useState(null);
+  const [tableData, setTableData] = useState([]);
+  const formRef = useRef(null)
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const user = app.currentUser;
-        if (!user) {
-          await app.logIn(Realm.Credentials.anonymous());
-        }
+
         const functionName = "calendar";
         const response = await user.functions[functionName]();
         const jsonSchema = response[0]?.public?.input?.jsonSchema;
@@ -33,10 +33,39 @@ const Schedule = () => {
 
     fetchData();
   }, []);
+  
+  const creatTableBelow = useCallback (() =>{
+    const numRows = 31;
+    const numCols = 20;
+    const newData = [];
+
+    for (let i = 0; i < numRows; i++) {
+      const row = [];
+      row.push(`Ngày ${i + 1}`);
+      for (let j = 0; j < numCols; j++) {
+        row.push(" ");
+      }
+      newData.push(row);
+    }
+    setTableData(newData);
+  }, []);
+
+  useEffect(() => {
+    creatTableBelow();
+  },[creatTableBelow]);
 
   const saveDataAsJson = () => {
     const jsonData = JSON.stringify(formData, null, 2);
     console.log(jsonData);
+    if (selectedIndex !== null) {
+      const newData = [...formData];
+      newData[selectedIndex] = currentData;
+      setFormData(newData);
+    } else {
+      setFormData([...formData, currentData]);
+    }
+    setCurrentData({});
+    setSelectedIndex(null);
     // Save or send jsonData to another API if needed
   };
 
@@ -49,18 +78,6 @@ const Schedule = () => {
     setCurrentData({});
   };
 
-  const handleSave = () => {
-    if (selectedIndex !== null) {
-      const newData = [...formData];
-      newData[selectedIndex] = currentData;
-      setFormData(newData);
-    } else {
-      setFormData([...formData, currentData]);
-    }
-    setCurrentData({});
-    setSelectedIndex(null);
-  };
-
   const handleDelete = () => {
     if (selectedIndex !== null) {
       const newData = formData.filter((_, i) => i !== selectedIndex);
@@ -70,15 +87,43 @@ const Schedule = () => {
     }
   };
 
-  const handleSelect = (index) => {
-    setSelectedIndex(index);
-    setCurrentData(formData[index]);
-  };
-
   const handleExit = () => {
     // Thực hiện hành động thoát hoặc điều hướng đến trang khác
     console.log("Thoát");
   };
+
+  const handleChosseShiftAll = () => {
+    // Thực hiện hành động thoát hoặc điều hướng đến trang khác
+    console.log("Thoát");
+  };
+  const handleChosseShift = () => {
+    // Thực hiện hành động thoát hoặc điều hướng đến trang khác
+    console.log("Thoát");
+  };
+  const handleDeleteShiftAll = () => {
+    // Thực hiện hành động thoát hoặc điều hướng đến trang khác
+    console.log("Thoát");
+  };
+  const handleDeleteShift = () => {
+    // Thực hiện hành động thoát hoặc điều hướng đến trang khác
+    console.log("Thoát");
+  };
+
+  const handleSelect = (index) => {
+    if (selectedIndex === index) {
+      setSelectedIndex(null);
+      setCurrentData({});
+      return;
+    }
+    setSelectedIndex(index);
+    setCurrentData(formData[index]);
+  };
+
+  const handleExternalSubmit = () => {
+    if (formRef.current) {
+      formRef.current.submit();
+    }
+  }
 
   if (!jsonSchema) {
     return <div className={styles.container}>Loading...</div>;
@@ -86,10 +131,10 @@ const Schedule = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Form Chấm Công</h2>
-      <div className={styles.flexContainer}>
-        <div className={styles.scheduleList}>
-          <table className={styles.scheduleTable}>
+      <h2>Lịch trình</h2>
+      <div className={styles.containerTableFormButton}>
+        <div className={styles.scheduleListTableTop}>
+          <table className={styles.scheduleTableTop}>
             <thead>
               <tr>
                 <th>Lịch trình</th>
@@ -97,33 +142,55 @@ const Schedule = () => {
             </thead>
             <tbody>
               {formData.map((data, index) => (
-                <tr
-                  key={index}
-                  className={selectedIndex === index ? styles.selected : ''}
-                  onClick={() => handleSelect(index)}
-                >
-                  <td>{data.lichTrinh || `Item ${index + 1}`}</td>
+                <tr key={index} onClick={() => handleSelect(index)}>
+                  <td>{data.scheduleName}</td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
-        <div className={styles.formSection}>
-          <Form
-            schema={jsonSchema}
-            formData={currentData}
-            onChange={handleFormChange}
-            validator={validator}
-            uiSchema={uiSchema}
-            onSubmit={saveDataAsJson}
-          />
+        <div className={styles.containerFormButtonFlex}>
+          <div className={styles.containerFormButton}>
+            <div className={styles.formSection}>
+              <Form
+                ref={formRef}
+                schema={jsonSchema}
+                formData={currentData}
+                onChange={handleFormChange}
+                validator={validator}
+                uiSchema={uiSchema}
+                onSubmit={saveDataAsJson}
+              />
+            </div>
+            <div className={styles.buttonGroup}>
+              <button onClick={handleAdd}>Thêm mới</button>
+              <button onClick={handleExternalSubmit}>Lưu</button>
+              <button onClick={handleDelete}>Xóa</button>
+              <button onClick={handleExit}>Thoát</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div className={styles.containerTableBelow}>
+        <div className={styles.containerChildres}>
+          <table id="custom-table" className={styles.scheduleListTableBelow}>
+            <tbody>
+              {tableData.map((row, rowIndex) => (
+                <tr key={rowIndex}>
+                  {row.map((cell, cellIndex) => (
+                    <td key={cellIndex}>{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
       <div className={styles.buttonGroup}>
-        <button onClick={handleAdd}>Thêm mới</button>
-        <button onClick={handleSave}>Lưu</button>
-        <button onClick={handleDelete}>Xóa</button>
-        <button onClick={handleExit}>Thoát</button>
+        <button onClick={handleChosseShiftAll}>Chọn ca tất cả</button>
+        <button onClick={handleChosseShift}>Chọn ca</button>
+        <button onClick={handleDeleteShiftAll}>Xóa ca tất cả</button>
+        <button onClick={handleDeleteShift}>Xóa ca</button>
       </div>
     </div>
   );

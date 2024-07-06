@@ -101,6 +101,9 @@ const uiSchema = {
     overtimeLimit2: {
       "ui:widget": "updown"
     }
+  },
+  "ui:submitButtonOptions": {
+    "norender": true
   }
 };
 

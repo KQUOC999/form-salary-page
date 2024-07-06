@@ -3,10 +3,10 @@ import Form from "@rjsf/core";
 import * as Realm from 'realm-web';
 import validator from '@rjsf/validator-ajv8';
 import styles from './styles.module.css'; // Import CSS Module
-import uiSchema from '../schedules/uiSchema';
 import CompanyStructure from '../structureCompany.module/companyStructure';
 import { useAppContext } from '../structureCompany.module/appContext.module';
 import { ToastContainer, toast } from 'react-toastify';
+import uiSchema from './uiSchema';
 import 'react-toastify/dist/ReactToastify.css';
 import * as XLSX from 'xlsx';
 
@@ -34,9 +34,7 @@ const ManagerEmployee = () => {
     const fetchData = async () => {
       try {
         const user = app.currentUser;
-        if (!user) {
-          await app.logIn(Realm.Credentials.anonymous());
-        }
+      
         const functionName = "manager_employeeJsonSchema";
         const response = await user.functions[functionName]();
         const jsonSchema = response[0]?.public?.input?.jsonSchema;
@@ -346,8 +344,8 @@ const handleAdd = () => {
             <Form
               ref={formRef}
               schema={jsonSchema}
-              uiSchema={uiSchema}
               formData={currentData}
+              uiSchema={uiSchema}
               onChange={handleFormChange}
               validator={validator}
               onSubmit={handleSave}

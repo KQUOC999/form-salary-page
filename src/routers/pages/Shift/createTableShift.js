@@ -19,9 +19,7 @@ const TableWithFormsAndCheckboxes = () => {
     const fetchData = async () => {
       try {
         const user = app.currentUser;
-        if (!user) {
-          await app.logIn(Realm.Credentials.anonymous());
-        }
+        
         const functionName = "shift";
         const response = await user.functions[functionName]();
         const jsonSchema = response[0]?.public?.input?.jsonSchema;
