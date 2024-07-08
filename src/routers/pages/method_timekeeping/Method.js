@@ -25,7 +25,6 @@ const TableWithFormsAndCheckboxes = () => {
         const jsonSchema = response[0]?.public?.input?.jsonSchema;
 
         setJsonSchema(jsonSchema);
-        console.log("response:", response);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -53,6 +52,16 @@ const TableWithFormsAndCheckboxes = () => {
       handleTable()
     }, [handleTable])
 
+  const createEnumsSchedule = useCallback ( async () => {
+    try {
+      const functionName = 'createEnums_employeeSchedule_fromTimeKeepingMethod';
+      const response = app?.currentUser?.callFunction(functionName);
+      return response
+    } catch (error) {
+      console.log(error.error)
+    }
+  }, [])
+
   const saveDataAsJson = async () => {
     const jsonData = formData
     try {
@@ -61,6 +70,7 @@ const TableWithFormsAndCheckboxes = () => {
 
       const response = await app?.currentUser?.callFunction(functionName, jsonData, scheduleName);
       await handleTable();
+      await createEnumsSchedule();
 
       return response
     } catch (error) {
@@ -112,6 +122,8 @@ const TableWithFormsAndCheckboxes = () => {
         const response = await app.currentUser.callFunction(functionName, checkDataDelete);
         
         await handleTable();
+        await createEnumsSchedule();
+
         setFormData({})
         return response
       }
@@ -121,7 +133,7 @@ const TableWithFormsAndCheckboxes = () => {
     } catch (error) {
       throw new Error(error);
     }
-  }, [handleTable, selectedRowIndex, formData]);
+  }, [handleTable, createEnumsSchedule, selectedRowIndex, formData]);
 
   const handleExit = () => {
     // Thực hiện hành động tương ứng với tab
@@ -139,9 +151,9 @@ const TableWithFormsAndCheckboxes = () => {
 
   return (
     <div className={styles.container}>
-      <h2>Cách chấm công</h2>
       <div className={styles.containerFormTable}>
         <div className={styles.containerFormButton}>
+          <h2>Cách chấm công</h2>
           <div className={styles.formSection}>
             <Form
               ref={formRef}
@@ -163,25 +175,25 @@ const TableWithFormsAndCheckboxes = () => {
             </div>
           </div>   
         </div>
-          <div className={styles.tablecontainer}>
-            <table className={styles.table}>
-              <thead>
-                <tr>
-                  <th> </th>
-                  <th>Tên lịch trình</th>
-                </tr>
-              </thead>
-              <tbody>  
-              {saveData.map((data, index) => (         
-                <tr key={index} onClick={() => handleRowClick(index)} style={{ backgroundColor: selectedRowIndex === index ? '#ddd' : 'transparent' }}>
-                  <td> </td>
-                  <td>{data.scheduleName}</td>           
-                </tr>
-              ))}
-              </tbody>
-            </table>
-          </div>
+        <div className={styles.tablecontainer}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th> </th>
+                <th>Tên lịch trình</th>
+              </tr>
+            </thead>
+            <tbody>  
+            {saveData.map((data, index) => (         
+              <tr key={index} onClick={() => handleRowClick(index)} style={{ backgroundColor: selectedRowIndex === index ? '#ddd' : 'transparent' }}>
+                <td> </td>
+                <td>{data.scheduleName}</td>           
+              </tr>
+            ))}
+            </tbody>
+          </table>
         </div>
+      </div>
     </div>
   );
 };

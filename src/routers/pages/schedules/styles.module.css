@@ -117,7 +117,6 @@ h2 {
 
 .containerChildres{
   min-width: 800px;
-  overflow-x: auto; 
   padding: 10px;
 }
 
@@ -147,3 +146,77 @@ h2 {
 .scheduleListTableBelow .selected td:first-child {
   text-align: center;
 }
+/* Modal */
+.modalOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal {
+  background: white;
+  padding: 15px; 
+  border-radius: 8px;
+  min-width: 400px;
+  position: relative; 
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px; 
+  right: 10px; 
+}
+.close_btn{
+  padding: 2px 4px;
+  color: rgb(240, 185, 22);
+  cursor: pointer;
+}
+.modalContent {
+  display: flex;
+  justify-content: space-between;
+  gap: 5px;
+}
+
+/* .shiftList*/
+.shiftList{
+  padding: 10px;
+  flex: 1;
+  border: 1px solid #141212;
+  border-radius: 5px;
+}
+.nameshiftList{
+  padding: 5px;
+}
+.childrenshiftList{
+  margin-bottom: 5px;
+}
+
+/* .dayList*/
+.dayList {
+  padding: 10px;
+  flex: 1;
+  border: 1px solid #141212;
+  border-radius: 5px;
+}
+.namedayList{
+  padding: 5px;
+}
+.containerdayList{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 columns */
+  gap: 5px;
+}
+.confirmButton{
+  display: flex;
+  margin-top: 10px;
+  align-items: center;
+}
+
+
+
+
