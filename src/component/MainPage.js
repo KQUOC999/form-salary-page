@@ -21,6 +21,7 @@ import Reporting from "../routers/pages/report/reporting.js";
 import TimeClock from "../routers/pages/times_timekeeping/Time.js";
 import ManagerEmployee from "../routers/pages/manager_employee/manager_employee.js";
 import TreeViewComponent from "../routers/pages/devices/device_One/connect.js";
+import ControlViewDevice from "../routers/pages/manager_devices/control_device.js";
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -151,7 +152,7 @@ const MainPage = () => {
       case "/tùy_chỉnh/phân_giờ":
         return null;
       case "/tùy_chỉnh/chọn_dữ_liệu":
-        return null;
+        return <ControlViewDevice />;
       case "/tùy_chỉnh/xóa_dữ_liệu":
         return <CustomizationPage />;
       default:

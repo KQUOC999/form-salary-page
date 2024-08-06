@@ -5,10 +5,10 @@ const uiSchema = {
  
   chonNhanVien: {
     tuNV: {
-      "ui:widget": "text" // Replaced 'updown' with 'text'
+      "ui:widget": "select" // Replaced 'updown' with 'text'
     },
     denNV: {
-      "ui:widget": "text" // Replaced 'updown' with 'text'
+      "ui:widget": "select" // Replaced 'updown' with 'text'
     }
   },
   

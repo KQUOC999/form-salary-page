@@ -94,3 +94,37 @@ h2 {
   bottom: 0;
   z-index: 4;
 }
+.buttonGroup {
+  position: relative;
+  padding: 20px;
+  border: 1px solid black;
+  margin: 20px 0;
+}
+
+.buttonGroup::before {
+  content: 'Báo cáo';
+  position: absolute;
+  top: -15px;
+  left: 5%;
+  transform: translateX(-50%);
+  background-color: white; /* Màu nền trùng với màu nền của container */
+  padding: 0 10px;
+}
+
+.buttonList {
+  display: flex;
+  gap: 20px;
+}
+.buttonList button{
+  padding: 5px 10px;
+  border: 1px solid #181717;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.buttonSingle button{
+  margin-top: 10px;
+  padding: 5px 10px;
+  border: 1px solid #181717;
+  border-radius: 5px;
+  cursor: pointer;
+}
