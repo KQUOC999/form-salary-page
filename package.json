@@ -10,8 +10,8 @@
     "@rjsf/core": "^5.18.4",
     "@rjsf/utils": "^5.18.4",
     "@rjsf/validator-ajv8": "^5.18.4",
-    "ag-grid-community": "^32.0.1",
-    "ag-grid-react": "^32.0.1",
+    "ag-grid-community": "^32.1.0",
+    "ag-grid-react": "^32.1.0",
     "axios": "^1.7.2",
     "boostrap": "^2.0.0",
     "core-js": "^3.37.1",
@@ -45,7 +45,7 @@
     "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "build": "react-scripts build"
+    "build": "cross-env GENERATE_SOURCEMAP=false react-scripts build"
   },
   "eslintConfig": {
     "extends": [
@@ -68,8 +68,7 @@
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.21.0",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "gh-pages": "^6.1.1",
-    "webpack": "^5.91.0",
-    "webpack-dev-server": "^5.0.4"
+    "cross-env": "^7.0.3",
+    "gh-pages": "^6.1.1"
   }
 }

@@ -25,6 +25,7 @@ const Reporting = () => {
   const [dataRecieved, setDataRecieved] = useState([]);
   const [newData, setNewData] = useState([]);
   const { selectedNode, parentNode} = useAppContext();
+  const [loadingProgress, setLoadingProgress] = useState(0);
   const formRef = useRef(null); // Ref cho form
 
   useEffect(() => {
@@ -321,9 +322,378 @@ const Reporting = () => {
     //console.log("newData", newDatas)
     return newDatas;
   };
+
+  const callDataRecievedFromMQTTServer = async () => {
+    try {
+      const functionName = 'callDataRecieved_fromMQTTServer';
+      const response = await app?.currentUser?.callFunction(functionName);
+      return response;
+    } catch (error) {
+      console.log(error.error)
+    }
+  }
   
+  const timeEnter = useCallback (async (date, shiftData, employee) => {
+    try {
+      const response = await callDataRecievedFromMQTTServer();
+      const fingerIds = response.map(items => items.fingerId);
+      return response.flatMap(item => {
+        const matchingShifts = shiftData.length > 0 ? shiftData
+          .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount)): [];
+         
+        if (matchingShifts.length > 0) {
+          const isMatch = matchingShifts.some(shift => item.fingerId === shift.items.fingerprintCount);
+          if (isMatch) {
+            if (item.time != null && item.date.includes(date)) {
+              return item.time; 
+            }
+          }
+        }
+
+        return [];
+      }).join(' - ') || '0';
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [])
+
+  const timeEnterEarly = useCallback (async (dates, date, shiftData, employee) => {
+    try {
+      const response = await callDataRecievedFromMQTTServer();
+      const fingerIds = response.map(items => items.fingerId);
+      const dates = response.map(items => items.date);
+
+      const timeRequires = response.flatMap(item => {
+          const checkData = shiftData
+          .filter(shift => employee?.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+          .filter(shift => dates.some(element => element === date));
+          if (checkData.length > 0) {
+            const times = checkData.flatMap(shift => shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.startTimes));
+            const isMatch = checkData.some(shift => item.fingerId === shift.items.fingerprintCount);
+            if (isMatch && item.date.includes(date)) {
+              return times.map(item => {
+                const time = item.split(':') || 0;
+                const hours = parseInt(time[0]) || 0;
+                const minutes = parseInt(time[1]) || 0;
+                const second = parseInt(time[2]) || 0;
+                const calculatedTimes = hours * 60 + minutes + second/60 || 0; //Quy đổi thời gian thành phút
+                return calculatedTimes;
+              });
+            }
+          }
+          return [];
+      })
+   
+      const timesEnter = response.flatMap(item => {
+        const matchingShifts = shiftData.length > 0 ? shiftData
+          .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+          .filter(shift => dates.some(element => element === date)): [];
+        if (matchingShifts.length > 0) {
+          const isMatch = matchingShifts.some(shift => item.fingerId === shift.items.fingerprintCount);
+          if (isMatch) {
+            if (item.time != null && item.date.includes(date)) {
+              const timeParts = item.time.split(':') || 0;
+              const hours = parseInt(timeParts[0]) || 0;
+              const minutes = parseInt(timeParts[1]) || 0;
+              const second = parseInt(timeParts[2]) || 0;
+              const calculatedTimes = hours * 60 + minutes + second/60 || 0; //Quy đổi thời gian thành phút
+              //console.log(calculatedTimes)
+              //console.log(item.time)
+              return calculatedTimes; 
+            }
+          }
+        }
+        return [];
+      });
+      
+      const timeEnterRequest = shiftData.length > 0 ? shiftData
+        .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+        .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+        .filter(shift => shift.items.getShift.some(cell => cell.value === 'Sáng' || cell.value === 'Chiều'))
+        .flatMap(shift => shift.items.timmingRecieved.map(element => element.timeDetails.allowEarly)) : [];
+
+       return shiftData.length > 0 ? shiftData
+        .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+        .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+        .flatMap(shift => {
+          const result = timesEnter.flatMap(timeString => {
+            return timeRequires.map((timeRequire, index) => {
+              const difference = (timeString - timeRequire);
+              if (difference < 0 ) {
+                return -(difference - timeEnterRequest[index]);
+              }
+                return '0'
+            })
+          })
+          return result.join(' - ') || '0'
+        }).join(' - ') || '0' : '0'
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [])
   
+  const timeEnterLately = useCallback (async (date, shiftData, employee) => {
+    try {
+      const response = await callDataRecievedFromMQTTServer();
+      const fingerIds = response.map(items => items.fingerId);
+      const dates = response.map(items => items.date);
+
+      const timeRequires = response.flatMap(item => {
+          const checkData = shiftData
+          .filter(shift => employee?.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+          .filter(shift => dates.some(element => element === date));
+          if (checkData.length > 0) {
+            const times = checkData.flatMap(shift => shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.startTimes));
+            const isMatch = checkData.some(shift => item.fingerId === shift.items.fingerprintCount);
+            if (isMatch && item.date.includes(date)) {
+              return times.map(item => {
+                const time = item.split(':') || 0;
+                const hours = parseInt(time[0]) || 0;
+                const minutes = parseInt(time[1]) || 0;
+                const second = parseInt(time[2]) || 0;
+                const calculatedTimes = hours * 60 + minutes + second/60 || 0; //Quy đổi thời gian thành phút
+                return calculatedTimes;
+              });
+            }
+          }
+          return [];
+      })
+      
+      const timesEnter = response.flatMap(item => {
+        const matchingShifts = shiftData.length > 0 ? shiftData
+          .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+          .filter(shift => dates.some(element => element === date)): [];
+        if (matchingShifts.length > 0) {
+          const isMatch = matchingShifts.some(shift => item.fingerId === shift.items.fingerprintCount);
+          if (isMatch) {
+            if (item.time != null && item.date.includes(date)) {
+              const timeParts = item.time.split(':') || 0;
+              const hours = parseInt(timeParts[0]) || 0;
+              const minutes = parseInt(timeParts[1]) || 0;
+              const second = parseInt(timeParts[2]) || 0;
+              const calculatedTimes = hours * 60 + minutes + second/60 || 0; //Quy đổi thời gian thành phút
+              //console.log(calculatedTimes)
+              //console.log(item.time)
+              return calculatedTimes; 
+            }
+          }
+        }
+        return [];
+      });
+    
+      const timeEnterRequest = shiftData.length > 0 ? shiftData
+        .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+        .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+        .filter(shift => shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều'))
+        .flatMap(shift => shift.items.timmingRecieved.map(element => element.timeDetails.allowLate)) : [];
+        return shiftData.length > 0 ? shiftData
+        .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+        .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+        .flatMap(shift => {
+          const result = timesEnter.flatMap(timeString => {
+            return timeRequires.map((timeRequire, index) => {
+              const difference = (timeString - timeRequire);
+              if (difference > 0 ) {
+                return (difference - timeEnterRequest[index]);
+              }
+                return '0'
+            })
+          })
+          return result.join(' - ') || '0'
+        }).join(' - ') || '0' : '0'
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [])
+
+  const timeOut = useCallback (async (date, shiftData, employee) => {
+    try {
+      const response = await callDataRecievedFromMQTTServer();
+      const fingerIds = response.map(items => items.fingerId);
+      return response.flatMap(item => {
+        const matchingShifts = shiftData.length > 0 ? shiftData
+          .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount)): [];
+         
+        if (matchingShifts.length > 0) {
+          const isMatch = matchingShifts.some(shift => item.fingerId === shift.items.fingerprintCount);
+          if (isMatch) {
+            if (item.time != null && item.date.includes(date)) {
+              return item.time; 
+            }
+          }
+        }
+
+        return [];
+      }).join(' - ') || '0';
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [])
+
+  const timeOutEarly = useCallback (async (date, shiftData, employee) => {
+    try {
+      const response = await callDataRecievedFromMQTTServer();
+      const fingerIds = response.map(items => items.fingerId);
+      const dates = response.map(items => items.date);
+
+      const timeRequires = response.flatMap(item => {
+          const checkData = shiftData
+          .filter(shift => employee?.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+          .filter(shift => dates.some(element => element === date));
+          if (checkData.length > 0) {
+            const times = checkData.flatMap(shift => shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.endTime));
+            const isMatch = checkData.some(shift => item.fingerId === shift.items.fingerprintCount);
+            if (isMatch && item.date.includes(date)) {
+              return times.map(item => {
+                const time = item.split(':') || 0;
+                const hours = parseInt(time[0]) || 0;
+                const minutes = parseInt(time[1]) || 0;
+                const second = parseInt(time[2]) || 0;
+                const calculatedTimes = hours * 60 + minutes + second/60 || 0; //Quy đổi thời gian thành phút
+                return calculatedTimes;
+              });
+            }
+          }
+          return [];
+      })
+   
+      const timesEnter = response.flatMap(item => {
+        const matchingShifts = shiftData.length > 0 ? shiftData
+          .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+          .filter(shift => dates.some(element => element === date)): [];
+        if (matchingShifts.length > 0) {
+          const isMatch = matchingShifts.some(shift => item.fingerId === shift.items.fingerprintCount);
+          if (isMatch) {
+            if (item.time != null && item.date.includes(date)) {
+              const timeParts = item.time.split(':') || 0;
+              const hours = parseInt(timeParts[0]) || 0;
+              const minutes = parseInt(timeParts[1]) || 0;
+              const second = parseInt(timeParts[2]) || 0;
+              const calculatedTimes = hours * 60 + minutes + second/60 || 0; //Quy đổi thời gian thành phút
+              //console.log(calculatedTimes)
+              //console.log(item.time)
+              return calculatedTimes; 
+            }
+          }
+        }
+        return [];
+      });
+      
+      const timeEnterRequest = shiftData.length > 0 ? shiftData
+        .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+        .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+        .filter(shift => shift.items.getShift.some(cell => cell.value === 'Sáng' || cell.value === 'Chiều'))
+        .flatMap(shift => shift.items.timmingRecieved.map(element => element.timeDetails.allowEarly)) : [];
+
+       return shiftData.length > 0 ? shiftData
+        .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+        .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+        .flatMap(shift => {
+          const result = timesEnter.flatMap(timeString => {
+            return timeRequires.map((timeRequire, index) => {
+              const difference = (timeString - timeRequire);
+              if (difference < 0 ) {
+                return -(difference - timeEnterRequest[index]);
+              }
+                return '0'
+            })
+          })
+          return result.join(' - ') || '0'
+        }).join(' - ') || '0' : '0'
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [])
   
+  const timeOutLately = useCallback (async (date, shiftData, employee) => {
+    try {
+      const response = await callDataRecievedFromMQTTServer();
+      const fingerIds = response.map(items => items.fingerId);
+      const dates = response.map(items => items.date);
+
+      const timeRequires = response.flatMap(item => {
+          const checkData = shiftData
+          .filter(shift => employee?.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+          .filter(shift => dates.some(element => element === date));
+          if (checkData.length > 0) {
+            const times = checkData.flatMap(shift => shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.endTime));
+            const isMatch = checkData.some(shift => item.fingerId === shift.items.fingerprintCount);
+            if (isMatch && item.date.includes(date)) {
+              return times.map(item => {
+                const time = item.split(':') || 0;
+                const hours = parseInt(time[0]) || 0;
+                const minutes = parseInt(time[1]) || 0;
+                const second = parseInt(time[2]) || 0;
+                const calculatedTimes = hours * 60 + minutes + second/60 || 0; //Quy đổi thời gian thành phút
+                return calculatedTimes;
+              });
+            }
+          }
+          return [];
+      })
+      
+      const timesEnter = response.flatMap(item => {
+        const matchingShifts = shiftData.length > 0 ? shiftData
+          .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+          .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+          .filter(shift => dates.some(element => element === date)): [];
+        if (matchingShifts.length > 0) {
+          const isMatch = matchingShifts.some(shift => item.fingerId === shift.items.fingerprintCount);
+          if (isMatch) {
+            if (item.time != null && item.date.includes(date)) {
+              const timeParts = item.time.split(':') || 0;
+              const hours = parseInt(timeParts[0]) || 0;
+              const minutes = parseInt(timeParts[1]) || 0;
+              const second = parseInt(timeParts[2]) || 0;
+              const calculatedTimes = hours * 60 + minutes + second/60 || 0; //Quy đổi thời gian thành phút
+              //console.log(calculatedTimes)
+              //console.log(item.time)
+              return calculatedTimes; 
+            }
+          }
+        }
+        return [];
+      });
+      
+      const timeEnterRequest = shiftData.length > 0 ? shiftData
+        .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+        .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+        .filter(shift => shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều'))
+        .flatMap(shift => shift.items.timmingRecieved.map(element => element.timeDetails.allowLate)) : [];
+        return shiftData.length > 0 ? shiftData
+        .filter(shift => employee.employeeId.includes(shift.items.employeeId))
+        .filter(shift => fingerIds.includes(shift.items.fingerprintCount))
+        .flatMap(shift => {
+          const result = timesEnter.flatMap(timeString => {
+            return timeRequires.map((timeRequire, index) => {
+              const difference = (timeString - timeRequire);
+              if (difference > 0 ) {
+                return (difference - timeEnterRequest[index]);
+              }
+                return '0'
+            })
+          })
+          return result.join(' - ') || '0'
+        }).join(' - ') || '0' : '0'
+
+    } catch (error) {
+      console.log(error.message);
+    }
+  }, [])
 
   const arrangeSelected = useCallback((employees, selection) => {
     // Tìm chỉ số của tuNV và denNV trong danh sách
@@ -347,96 +717,118 @@ const Reporting = () => {
     return selectedEmployees;
   }, []);
   
-  const handleCalculate = useCallback(() => {
+  const handleCalculate = useCallback(async () => {
     console.log("Tính công cho nhân viên:", currentData);
     handleCreateData();
-
+    
     if (currentData?.chonNgay?.tuNgay && currentData?.chonNhanVien) {
       const dataSelectedEmployee = arrangeSelected(newData, currentData.chonNhanVien);
       const dates = getNgayRows(currentData?.chonNgay?.tuNgay, currentData?.chonNgay?.denNgay);
-      // Gọi getShift và cập nhật newData
       const updatedData = getShift(dates, newData);
   
       const convertDateToDayString = (date) => {
         const dateObj = new Date(date);
-        const dayNumber = dateObj.getDate();
-        return `Ngày ${dayNumber}`;
+        return `Ngày ${dateObj.getDate()}`;
       };
+    
+      const totalCalculations = dataSelectedEmployee.length * dates.length;
+      let completedCalculations = 0;
   
-      const calculatedRows = dataSelectedEmployee.flatMap(employee => 
-        dates.map(date => {
+      const calculatedRows = await Promise.all(dataSelectedEmployee.flatMap(async (employee) => {
+        return Promise.all(dates.map(async (date) => {
           const dayString = convertDateToDayString(date);
   
-          // Lọc ca làm việc khớp với ngày và có giá trị 'Sáng' hoặc 'Tối'
           const shiftData = updatedData.flatMap(items => {
             if (Array.isArray(items.getShift)) {
               const shift = items.getShift.find(cell => dayString === cell.value);
-              if (shift) {
-                //console.log(shift)
-                return {...shift, items}; // Chỉ lấy ca làm việc (sáng/tối)
-              }
+              return shift ? { ...shift, items } : null;
             }
-            return null; // Trả về null nếu không có ca làm việc phù hợp
-          }).filter(shift => shift); // Lọc bỏ các giá trị null
+            return null;
+          }).filter(shift => shift);
+
+          //console.log(shiftData)
+
+          const gioVao  = await timeEnter(date, shiftData, employee);
+          const treVao  = await timeEnterLately(date, shiftData, employee);
+          const somVao  = await timeEnterEarly(dates, date, shiftData, employee);
+          const gioRa   = await timeOut(date, shiftData, employee);
+          const somRa   = await timeOutEarly(date, shiftData, employee);
+          const veTre   = await timeOutLately(date, shiftData, employee);
+
+          const demCong = shiftData.flatMap(shift => {
+            const checkData = employee?.employeeId.includes(shift.items.employeeId);
+            if (checkData && gioVao !== '0' && gioRa !== '0') {
+              return shift.items.timmingRecieved.map(element => element.timeDetails.workHours)
+                .reduce((sum, workHours) => sum + (workHours || 0), 0);
+            }
+            return [];
+          }).reduce((sum, hours) => sum + hours, 0) || 0; 
           
-          console.log("shiftData:", shiftData)
-          return {
+          const kyHieu = demCong !== 0 ? 'Đ' : 'V';
+
+          const result = {
             maNV: employee?.employeeId,
             tenNV: employee?.employeeName,
             ngay: date,
             thu: getWeekdayRows(date),
-            ca: shiftData.length > 0 ? shiftData.flatMap(shift => {
+            ca: shiftData.flatMap(shift => {
               const checkData = employee?.employeeId.includes(shift.items.employeeId);
               if (checkData) {
-                return shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.value).join('- ');
+                return shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.value);
               }
-              return '';
-            }).join(' ') : "",
-
-            vao: shiftData.length > 0 ? shiftData.map(shift => {
+              return [];
+            }).join(' - ') || 'Nghỉ',
+            
+            vao: shiftData.flatMap(shift => {
               const checkData = employee?.employeeId.includes(shift.items.employeeId);
               if (checkData) {
-                return shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.startTimes).join('- ');
+                return shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.startTimes);
               }
-              return '';
-            }).join(' ') : "",
-
-            ra: shiftData.length > 0 ? shiftData.map(shift => {
+              return [];
+            }).join(' - ') || '0',
+            
+            ra: shiftData.flatMap(shift => {
               const checkData = employee?.employeeId.includes(shift.items.employeeId);
               if (checkData) {
-                return shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.endTime).join('- ');
+                return shift.items.getShift.filter(cell => cell.value === 'Sáng' || cell.value === 'Chiều').map(cell => cell.endTime);
               }
-              return '';
-            }).join(' ') : "",
-
+              return [];
+            }).join(' - ') || '0',
+            
             cong: shiftData.length > 0 ? shiftData
               .filter(shift => employee.employeeId.includes(shift.items.employeeId))
-              .filter(shift => shift.items.getShift.some(cell => cell.value === 'Sáng' || cell.value === 'Chiều'))
               .flatMap(shift => shift.items.timmingRecieved.map(element => element.timeDetails.workHours))
-              .reduce(((sum, workHours) => sum + (workHours || 0)), 0) : ""
-            ,
-            gio: "", // Thiết lập giá trị giờ nếu có
-            tre: "", // Thiết lập giá trị trễ nếu có
-            som: "", // Thiết lập giá trị sớm nếu có
-            veTre: "", // Thiết lập giá trị về trễ nếu có
-            tc1: "", // Thiết lập giá trị TC1 nếu có
-            tc2: "", // Thiết lập giá trị TC2 nếu có
-            demCong: "", // Thiết lập giá trị đếm công nếu có
-            kyHieu: "" // Thiết lập giá trị ký hiệu nếu có
-        };
-        
-        })
-      );
+              .reduce((sum, workHours) => sum + (workHours || 0), 0) : "",
+            
+            gioVao: gioVao,
+            treVao: treVao,
+            somVao: somVao,
+
+            gioRa: gioRa,
+            somRa: somRa,
+            veTre: veTre,
+
+            tc1: "0", //wating code lately
+            tc2: "0",
+            demCong: demCong,
+            kyHieu: kyHieu
+          };
   
-      setRowDefs(calculatedRows);
+          completedCalculations += 1;
+          const progressPercentage = (completedCalculations / totalCalculations) * 100;
+          setLoadingProgress(progressPercentage);
+          return result;
+        }));
+      }));
+  
+      setRowDefs(calculatedRows.flat());
+      setLoadingProgress(0);
     } else {
       console.log("Dữ liệu không đủ để tính toán");
     }
-  }, [currentData, arrangeSelected, newData, handleCreateData]);
+  }, [currentData, arrangeSelected, newData, handleCreateData, timeEnter, timeEnterEarly, timeEnterLately, timeOut, timeOutEarly, timeOutLately]);
   
- 
   
-
   const handleExportToExcel = () => {
     const headers = columnDefs.map(item => item.headerName);
     const data = rowDefs.map(item => [
@@ -448,9 +840,11 @@ const Reporting = () => {
       item.vao,
       item.ra,
       item.cong,
-      item.gio,
-      item.tre,
-      item.som,
+      item.gioVao,
+      item.somVao,
+      item.treVao,
+      item.gioRa,
+      item.somRa,
       item.veTre,
       item.tc1,
       item.tc2,
@@ -475,22 +869,24 @@ const Reporting = () => {
   };
 
   const columnDefs = [
-    { headerName: "Mã NV", field: "maNV", pinned: 'left', width: 100},
-    { headerName: "Tên NV", field: "tenNV", pinned: 'left', width: 150, filter: 'agTextColumnFilter' },
-    { headerName: "Ngày", field: "ngay", pinned: 'left', width: 120 },
-    { headerName: "Thứ", field: "thu", width: 80 },
-    { headerName: "Ca", field: "ca", width: 80 },
-    { headerName: "Vào", field: "vao", width: 100 },
-    { headerName: "Ra", field: "ra", width: 100 },
-    { headerName: "Công", field: "cong", width: 100 },
-    { headerName: "Giờ", field: "gio", width: 100 },
-    { headerName: "Trễ", field: "tre", width: 100 },
-    { headerName: "Sớm", field: "som", width: 100 },
-    { headerName: "Về trễ", field: "veTre", width: 100 },
-    { headerName: "TC1", field: "tc1", width: 100 },
-    { headerName: "TC2", field: "tc2", width: 100 },
-    { headerName: "Đếm Công", field: "demCong", width: 100 },
-    { headerName: "Ký hiệu", field: "kyHieu", width: 100 }
+    { headerName: "Mã NV", field: "maNV", pinned: 'left', width: 100, editable: true },
+    { headerName: "Tên NV", field: "tenNV", pinned: 'left', width: 150, editable: true, filter: 'agTextColumnFilter' },
+    { headerName: "Ngày", field: "ngay", pinned: 'left', width: 120, editable: true },
+    { headerName: "Thứ", field: "thu", width: 80, editable: true },
+    { headerName: "Ca", field: "ca", width: 80, editable: true },
+    { headerName: "Vào", field: "vao", width: 100, editable: true },
+    { headerName: "Ra", field: "ra", width: 100, editable: true },
+    { headerName: "Công", field: "cong", width: 100, editable: true },
+    { headerName: "Giờ Vào", field: "gioVao", width: 100, editable: true },
+    { headerName: "Vào sớm", field: "somVao", width: 100, editable: true },
+    { headerName: "Vào trễ", field: "treVao", width: 100, editable: true },
+    { headerName: "Giờ Ra", field: "gioRa", width: 100, editable: true },
+    { headerName: "Về sớm", field: "somRa", width: 100, editable: true },
+    { headerName: "Về trễ", field: "veTre", width: 100, editable: true },
+    { headerName: "TC1", field: "tc1", width: 100, editable: true },
+    { headerName: "TC2", field: "tc2", width: 100, editable: true },
+    { headerName: "Đếm Công", field: "demCong", width: 100, editable: true },
+    { headerName: "Ký hiệu", field: "kyHieu", width: 100, editable: true }
   ];
 
   const handleExternalSubmit = () => {
@@ -500,7 +896,7 @@ const Reporting = () => {
   };
 
   if (!jsonSchema) {
-    return <div className={styles.container}>Loading...</div>;
+    return <div className={styles.notLogin}>Loading...</div>;
   }
 
   return (
@@ -540,6 +936,15 @@ const Reporting = () => {
               </div>
             </div>
           </div>
+
+          <div className={styles.loadingProgress}>
+            {loadingProgress > 0 && (
+              <div className={styles.loadingBar} style={{ width: `${loadingProgress}%` }}>
+                {loadingProgress.toFixed(2)}%
+              </div>
+            )}
+          </div>
+
           <div className={styles.scheduleList}>
             <div
               className="ag-theme-alpine"
