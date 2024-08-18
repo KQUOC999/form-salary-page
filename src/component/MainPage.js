@@ -9,7 +9,7 @@ import Account from "../routers/pages/home/account.js";
 import MyForm from "../routers/pages/home/form.js";
 import MqttClient from "../routers/pages/home/nodeRed.js";
 import Search from "../routers/pages/home/search.js";
-import AttendancePage from "../routers/pages/home/AttendancePage.js";
+//import AttendancePage from "../routers/pages/home/AttendancePage.js";
 import CustomizationPage from "../routers/pages/home/CustomizationPage.js";
 import TreeStructure from "../routers/pages/map/TreeStructure.js";
 import TableWithFormsAndCheckboxes from "../routers/pages/shift/createTableShift.js";
@@ -22,6 +22,8 @@ import TimeClock from "../routers/pages/times_timekeeping/Time.js";
 import ManagerEmployee from "../routers/pages/manager_employee/manager_employee.js";
 import TreeViewComponent from "../routers/pages/devices/device_One/connect.js";
 import ControlViewDevice from "../routers/pages/manager_devices/control_device.js";
+import WebSocketClient from "../routers/pages/realTime_data/realTime.js";
+import LocationSelect from "../routers/pages/searchAdress/adress.js";
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -140,7 +142,7 @@ const MainPage = () => {
       case "/tính_công/time_clock_hours":
         return <TimeClock />;
       case "/tính_công/current_status":
-        return <AttendancePage />;
+        return <WebSocketClient />;
       case "/tùy_chỉnh/phân_quyền":
         return <TreeViewComponent />;
       case "/tùy_chỉnh/sơ_đồ":
@@ -150,7 +152,7 @@ const MainPage = () => {
       case "/tùy_chỉnh/phép_năm":
         return null;
       case "/tùy_chỉnh/phân_giờ":
-        return null;
+        return <LocationSelect />;
       case "/tùy_chỉnh/chọn_dữ_liệu":
         return <ControlViewDevice />;
       case "/tùy_chỉnh/xóa_dữ_liệu":
