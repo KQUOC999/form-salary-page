@@ -123,29 +123,29 @@ const Reporting = () => {
         setDataRecieved(response);
         //console.log("response:", response)
 
-        const newEnums = response.map(doc => doc.employeeName);
+        const newEnums = response.map(doc => doc.employeeName) || {};
           // Cập nhật currentData với giá trị mới
           setJsonSchema(prevSchema => ({
             ...prevSchema,
             properties: {
-              ...prevSchema.properties,
+              ...prevSchema?.properties || {},
               chonNhanVien: {
-                ...prevSchema.properties.chonNhanVien,
+                ...prevSchema?.properties?.chonNhanVien || {},
                 properties: {
-                  ...prevSchema.properties.chonNhanVien.properties,
+                  ...prevSchema?.properties?.chonNhanVien?.properties || {},
                   tuNV: {
-                    ...prevSchema.properties.chonNhanVien.properties.tuNV,
+                    ...prevSchema?.properties?.chonNhanVien?.properties?.tuNV || {},
                     enum: newEnums
                   },
                   denNV: {
-                    ...prevSchema.properties.chonNhanVien.properties.denNV,
+                    ...prevSchema?.properties?.chonNhanVien?.properties?.denNV || {},
                     enum: newEnums
                   }
                 }
               }
             }
-          }));
-        return response
+          }) || {});
+        return response || {}
 
     } catch (error) {
       return error.error
