@@ -24,6 +24,8 @@ import TreeViewComponent from "../routers/pages/devices/device_One/connect.js";
 import ControlViewDevice from "../routers/pages/manager_devices/control_device.js";
 import WebSocketClient from "../routers/pages/realTime_data/realTime.js";
 import LocationSelect from "../routers/pages/searchAdress/adress.js";
+import PolicyLeaving from "../routers/pages/policy-basedLeave/leavePolicy.js";
+
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -148,7 +150,7 @@ const MainPage = () => {
       case "/tùy_chỉnh/sơ_đồ":
         return <TreeStructure />;
       case "/tùy_chỉnh/nghỉ_chế_độ":
-        return null;
+        return <PolicyLeaving />;
       case "/tùy_chỉnh/phép_năm":
         return null;
       case "/tùy_chỉnh/phân_giờ":

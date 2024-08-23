@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect} from 'react';
 import * as Realm from 'realm-web';
 import Form from "@rjsf/core";
 import validator from '@rjsf/validator-ajv8';
@@ -6,6 +6,9 @@ import styles from './styles.module.css'; // Import CSS Module
 import uiSchema from './uiSchema'; // Adjust this path according to your project structure
 import * as XLSX from 'xlsx'; // Import XLSX library
 import { saveAs } from 'file-saver'; // Import file-saver library
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-community/styles/ag-grid.css';
+import 'ag-grid-community/styles/ag-theme-alpine.css';
 import CompanyStructure from '../structureCompany.module/companyStructure'
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
@@ -15,9 +18,6 @@ const TimeClock = () => {
   const [formData, setFormData] = useState([]);
   const [currentData, setCurrentData] = useState({});
   const [selectedIndex, setSelectedIndex] = useState(null);
-  const [columnWidths, setColumnWidths] = useState({}); // State to store column widths
-
-  const headerRefs = useRef([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -38,20 +38,27 @@ const TimeClock = () => {
     fetchData();
   }, []);
 
-  const generateHeaders = () => {
-    const staticHeaders = [
-      "Mã nhân viên",
-      "Tên nhân viên",
-      "Ngày",
-      "Phòng ban"
-    ];
+  const columnDefs = [
+    { headerName: 'Mã NV', field: 'maNV', editable: true, pinned: 'left' },
+    { headerName: 'Tên NV', field: 'tenNV', editable: true, pinned: 'left' },
+    { headerName: 'Ngày', field: 'ngay', editable: true, pinned: 'left' },
+    { headerName: 'Phòng Ban', field: 'phongBan', editable: true, pinned: 'left', filter: 'agTextColumnFilter' },
+    ...Array.from({ length: 20 }, (_, i) => ({
+      headerName: `Lần ${i + 1}`,
+      field: `lan${i + 1}`,
+      editable: true, 
+    })),
+  ];
 
-    const dynamicHeaders = [];
-    for (let i = 1; i <= 20; i++) {
-      dynamicHeaders.push(`Lần ${i}`);
-    }
+  // Dữ liệu của bảng
+  const rowData = formData.map((data, index) => ({
+    ...data,
+    id: index,
+  }));
 
-    return [...staticHeaders, ...dynamicHeaders];
+  // Lựa chọn hàng
+  const onRowClicked = (event) => {
+    handleSelect(event.data.id);
   };
 
   const handleFormChange = (event) => {
@@ -69,40 +76,29 @@ const TimeClock = () => {
   };
 
   const handleExportToExcel = () => {
-    const headers = generateHeaders();
+    // Lấy tiêu đề từ `columnDefs`
+    const headers = columnDefs.map(col => col.headerName);
 
+    // Chuẩn bị dữ liệu từ `formData`
     const data = formData.map(item => [
       item.maNV,
       item.tenNV,
       item.ngay,
       item.phongBan,
-      ...Array(20).fill().map((_, i) => item[`lan${i + 1}`] || '')
+      ...Array.from({ length: 20 }, (_, i) => item[`lan${i + 1}`] || '')
     ]);
-
+  
+    // Tạo worksheet từ tiêu đề và dữ liệu
     const worksheet = XLSX.utils.aoa_to_sheet([headers, ...data]);
+  
+    // Tạo workbook và thêm worksheet
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Giờ chấm công");
+  
+    // Xuất workbook thành file Excel
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
     const blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(blob, 'gio_cham_cong.xlsx');
-  };
-
-  const onMouseDown = (index, e) => {
-    const startX = e.clientX;
-    const startWidth = headerRefs.current[index].offsetWidth;
-
-    const onMouseMove = (e) => {
-      const newWidth = startWidth + (e.clientX - startX);
-      setColumnWidths((prev) => ({ ...prev, [index]: newWidth }));
-    };
-
-    const onMouseUp = () => {
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('mouseup', onMouseUp);
-    };
-
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
   };
 
   if (!jsonSchema) {
@@ -140,42 +136,20 @@ const TimeClock = () => {
             </div>
           </div>
           <div className={styles.scheduleList}>
-            <table className={styles.scheduleTable}>
-              <thead>
-                <tr>
-                  {generateHeaders().map((header, index) => (
-                    <th
-                      key={index}
-                      ref={(el) => (headerRefs.current[index] = el)}
-                      style={{ width: columnWidths[index] || 'auto' }}
-                    >
-                      {header}
-                      <div
-                        className={styles.resizer}
-                        onMouseDown={(e) => onMouseDown(index, e)}
-                      />
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {formData.map((data, index) => (
-                  <tr
-                    key={index}
-                    className={selectedIndex === index ? styles.selected : ''}
-                    onClick={() => handleSelect(index)}
-                  >
-                    <td>{data.maNV}</td>
-                    <td>{data.tenNV}</td>
-                    <td>{data.ngay}</td>
-                    <td>{data.phongBan}</td>
-                    {Array.from({ length: 20 }, (_, i) => (
-                      <td key={i}>{data[`lan${i + 1}`]}</td>
-                    ))}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <div className={styles.scheduleListContainer}>
+              <div className="ag-theme-alpine" style={{ height: '100%', width: '100%' }}>
+              <AgGridReact
+                  columnDefs={columnDefs}
+                  rowData={rowData}
+                  rowSelection="single"
+                  onRowClicked={onRowClicked}
+                  domLayout='autoHeight'
+                  getRowClass={(params) => 
+                    params.node.rowIndex === selectedIndex ? 'selected' : ''
+                  }
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>

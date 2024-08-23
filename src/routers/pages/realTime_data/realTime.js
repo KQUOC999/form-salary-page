@@ -7,12 +7,14 @@ const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 const WebSocketClient = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
+  const [isConnected, setIsConnected] = useState(false);
   const socketRef = useRef(null);
 
   useEffect(() => {
     socketRef.current = new WebSocket('wss://192.168.1.7/ws'); // Update with your ESP32 WebSocket server address
 
     socketRef.current.onopen = () => {
+      setIsConnected(true);
       console.log('Connected to WebSocket Server');
     };
 
@@ -22,6 +24,7 @@ const WebSocketClient = () => {
     };
 
     socketRef.current.onclose = () => {
+      setIsConnected(false);
       console.log('WebSocket connection closed');
     };
 
@@ -33,11 +36,38 @@ const WebSocketClient = () => {
   }, []);
 
   const sendMessage = () => {
-    if (socketRef.current && input) {
+    if (socketRef.current && input && isConnected) {
       socketRef.current.send(input);
       setInput('');
     }
   };
+
+  const checkWebSocketState = () => {
+    if (socketRef.current) {
+      switch (socketRef.current.readyState) {
+        case WebSocket.CONNECTING:
+          console.log('WebSocket is connecting...');
+          break;
+        case WebSocket.OPEN:
+          console.log('WebSocket is open and connected.');
+          break;
+        case WebSocket.CLOSING:
+          console.log('WebSocket is closing...');
+          break;
+        case WebSocket.CLOSED:
+          console.log('WebSocket is closed.');
+          break;
+        default:
+          console.log('Unknown WebSocket state.');
+          break;
+      }
+    }
+  };
+
+  useEffect(() => {
+    checkWebSocketState();
+  }, [])
+  
 
   if (!app.currentUser) {
     return <div className={styles.notLogin}>Loading...</div>;

@@ -133,7 +133,7 @@ const handleAdd = () => {
 
 */
 
-  const handleSave = async () => {
+  const handleSave = async (index) => {
     // Kiểm tra nếu trường department đã có giá trị thì mới lưu
     if (currentData.department) {
       if (selectedIndex !== null) {
@@ -143,11 +143,13 @@ const handleAdd = () => {
       } else {
         setFormData(prevData => [...prevData, currentData, {}]);
       }
-      setCurrentData({});
-      setSelectedIndex(null);
 
       encodeData();
       await saveDataToServer();
+
+      setServerData([]);
+      setCurrentData({});
+      
       toast.success('Lưu thông tin thành công!');
     } else {
       toast.error('Vui lòng điền thông tin phòng ban!');

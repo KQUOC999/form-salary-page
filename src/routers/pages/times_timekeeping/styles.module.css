@@ -1,11 +1,11 @@
 .container {
   background-color: #f9f9f9;
   border-radius: 8px;
-  overflow-y: auto;
   flex-grow: 1;
   width: 100%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
+  overflow-x: auto;
 }
 
 h2 {
@@ -14,13 +14,16 @@ h2 {
 }
 
 .flexContainer {
+  padding: 10px;
   display: flex;
-  width: 100%;
 }
 
 .flexContainerHalft {
   display: block;
   width: 100%;
+}
+.flexContainerChild {
+  display: flex;
 }
 
 .mapCompany {
@@ -35,47 +38,22 @@ h2 {
 }
 
 .scheduleList {
+  position: relative;
   background-color: #e0e0e0;
   border-radius: 8px;
   border: 2px solid #ccc;
-  padding: 20px;
+  padding: 10px;
   margin: 5px 10px 0 10px;
-  width: 100%;
-  min-width: 100%;
-  overflow-x: auto;
-  position: relative;
+  height: 300px;
+  overflow-y: auto;
 }
 
 .scheduleTable {
-  width: 100%;
+  position: absolute;
   border-collapse: collapse;
   background-color: #e0e0e0;
   table-layout: auto;
-}
-
-.scheduleTable th,
-.scheduleTable td {
-  border: 1px solid #302e2e;
-  padding: 8px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.scheduleTable th {
-  background-color: #f2f2f2;
-  border-bottom: 1.5px solid #181717;
-  position: sticky;
-  top: 0;
-  z-index: 2;
-}
-
-.scheduleTable .selected {
-  background-color: #007bff;
-  color: white;
-}
-
-.flexContainerChild{
-  display: flex;
+  max-width: 100%;
   width: 100%;
 }
 
@@ -84,8 +62,9 @@ h2 {
   background-color: #fff;
   border-radius: 8px;
   border: 2px solid #ccc;
+  width: 60%;
   margin: 0 10px 0 10px;
-  width: 100%;
+  min-width: 200px;
 }
 
 .resizer {
@@ -98,13 +77,11 @@ h2 {
   bottom: 0;
   z-index: 4;
 }
-
 .buttonGroup {
+  flex: 1;
   padding: 20px;
-  width: 100%;
-  margin: 0 10px;
-  align-items: center;
-  display: flex;
+  margin: 0 10px 0 10px;
+  min-width: 100px;
 }
 .button{
   margin-right: 10px;
@@ -113,5 +90,4 @@ h2 {
   cursor: pointer;
   border: 1px solid #302e2e;
 }
-
 

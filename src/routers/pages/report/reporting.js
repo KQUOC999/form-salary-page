@@ -798,7 +798,7 @@ const Reporting = () => {
             cong: shiftData.length > 0 ? shiftData
               .filter(shift => employee.employeeId.includes(shift.items.employeeId))
               .flatMap(shift => shift.items.timmingRecieved.map(element => element.timeDetails.workHours))
-              .reduce((sum, workHours) => sum + (workHours || 0), 0) : "",
+              .reduce((sum, workHours) => sum + (workHours || 0), 0) : 0,
             
             gioVao: gioVao,
             treVao: treVao,
