@@ -44,7 +44,7 @@ const TableWithFormsAndCheckboxes = () => {
         setSaveData((prevData) => [...prevData, response]);
       }
     } catch (error) {
-      throw new Error(error);
+      console.log(error.error);
     }
   }, []);
 
@@ -101,7 +101,7 @@ const TableWithFormsAndCheckboxes = () => {
       }
     } catch (error) {
       console.error("Error deleting data:", error);
-      throw new Error(error);
+      console.log(error.error);
     }
   }, [handleDataTable, selectedRowIndex, formData]);
   

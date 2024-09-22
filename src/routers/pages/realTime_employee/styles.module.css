@@ -1,0 +1,59 @@
+.container {
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  flex-grow: 1;
+  width: 100%;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+  overflow-x: auto;
+}
+
+.containerChildrent {
+  padding: 10px;
+}
+
+.headerSection {
+  display: flex;
+  gap: 40px;
+  padding: 10px;
+}
+.buttonGroupHeader{
+  display: flex;
+  gap: 10px;
+}
+
+.midlleSection {
+  display: flex;
+  gap: 10px;
+  padding: 10px;
+}
+.tableLeft {
+  flex: 1;
+}
+.tableRight {
+ width: 40%;
+}
+
+.footerSection {
+  display: flex;
+  gap: 10%;
+  padding: 10px;
+}
+.formContainer{
+  display: block;
+}
+.elementFormFilter {
+  display: flex;
+  gap: 20px;
+}
+.buttonContainer {
+  display: block;
+}
+.buttonGroup {
+  display: flex;
+  gap: 20px;
+}
+
+.announcementBottomPage {
+  display: block;
+}

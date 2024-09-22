@@ -22,10 +22,11 @@ import TimeClock from "../routers/pages/times_timekeeping/Time.js";
 import ManagerEmployee from "../routers/pages/manager_employee/manager_employee.js";
 import TreeViewComponent from "../routers/pages/devices/device_One/connect.js";
 import ControlViewDevice from "../routers/pages/manager_devices/control_device.js";
-import WebSocketClient from "../routers/pages/realTime_data/realTime.js";
+//import WebSocketClient from "../routers/pages/realTime_data/realTime.js";
 import LocationSelect from "../routers/pages/searchAdress/adress.js";
 import PolicyLeaving from "../routers/pages/policy-basedLeave/leavePolicy.js";
-
+import AbsentEmployee from "../routers/pages/realTime_employee/absentEmloyee.js";
+import HighAdminAccount from "../routers/pages/acountAdmin/highAdmin/highAdminAccount.js";
 
 const app = new Realm.App({ id: process.env.REACT_APP_REALM_ID });
 
@@ -144,7 +145,7 @@ const MainPage = () => {
       case "/tính_công/time_clock_hours":
         return <TimeClock />;
       case "/tính_công/current_status":
-        return <WebSocketClient />;
+        return <AbsentEmployee />;
       case "/tùy_chỉnh/phân_quyền":
         return <TreeViewComponent />;
       case "/tùy_chỉnh/sơ_đồ":
@@ -152,7 +153,7 @@ const MainPage = () => {
       case "/tùy_chỉnh/nghỉ_chế_độ":
         return <PolicyLeaving />;
       case "/tùy_chỉnh/phép_năm":
-        return null;
+        return <HighAdminAccount />;
       case "/tùy_chỉnh/phân_giờ":
         return <LocationSelect />;
       case "/tùy_chỉnh/chọn_dữ_liệu":

@@ -26,8 +26,8 @@ const ManagerEmployee = () => {
   const formRef = useRef(null); // Ref cho form
 
   useEffect( () => {
-    console.log('parentNode:', parentNode)
-    console.log('childNodes:', childNodes)
+    //console.log('parentNode:', parentNode)
+    //console.log('childNodes:', childNodes)
   }, [parentNode, childNodes])
   
   useEffect(() => {
@@ -75,7 +75,7 @@ const ManagerEmployee = () => {
 
     if (dataTreeCompany !== null){
       setDataTreeCompany(dataTreeCompany)
-      console.log('data:', data);
+      //console.log('data:', data);
     }
 
   }, [selectedNode, dataByType, departmentValue, dataTreeCompany, data]);
@@ -135,28 +135,34 @@ const handleAdd = () => {
 
   const handleSave = async (index) => {
     // Kiểm tra nếu trường department đã có giá trị thì mới lưu
-    if (currentData.department) {
-      if (selectedIndex !== null) {
-        const newData = [...formData];
-        newData[selectedIndex] = currentData;
-        setFormData(newData);
+    try {
+      if (currentData.department) {
+        if (selectedIndex !== null) {
+          const newData = [...formData];
+          newData[selectedIndex] = currentData;
+          setFormData(newData);
+        } else {
+          setFormData(prevData => [...prevData, currentData, {}]);
+        }
+        
+        const callDataFromEmployeeSchedule = await app?.currentUser?.callFunction('call_dataRecied_employeeSchedule');
+
+        encodeData();
+        await saveDataToServer(callDataFromEmployeeSchedule[0]);
+  
+        setServerData([]);
+        setCurrentData({});
+        
+        toast.success('Lưu thông tin thành công!');
       } else {
-        setFormData(prevData => [...prevData, currentData, {}]);
+        toast.error('Vui lòng điền thông tin phòng ban!');
       }
-
-      encodeData();
-      await saveDataToServer();
-
-      setServerData([]);
-      setCurrentData({});
-      
-      toast.success('Lưu thông tin thành công!');
-    } else {
-      toast.error('Vui lòng điền thông tin phòng ban!');
+    } catch (error) {
+      console.log(error.error);
     }
   };
 
-  const saveDataToServer = async () => {
+  const saveDataToServer = async (callDataFromEmployeeSchedule) => {
     const functionName = "dataRecied_employee";
     const dataToServer = {
       currentData,
@@ -165,6 +171,23 @@ const handleAdd = () => {
     let employeeId = dataToServer?.currentData?.employeeId;
     try {
       const response = await app.currentUser.callFunction(functionName, dataToServer, employeeId);
+      const checkData = callDataFromEmployeeSchedule.filter(item => employeeId.includes(item.employeeId));
+
+      function compareObjects(obj1, obj2) {
+        let differences = {};
+      
+        for (let key in obj1) {
+          if (obj1.hasOwnProperty(key) && obj2.hasOwnProperty(key)) {
+            if (obj1[key] !== obj2[key]) {
+              differences[key] = { oldValue: obj1[key], newChange: obj2[key] };
+            }
+          }
+        }
+        return differences;
+      }
+      const resultCompare = compareObjects(checkData[0], currentData);
+      console.log(resultCompare);
+      
       return response
 
     } catch (error) {
